@@ -2,228 +2,310 @@
 <items version="2" >
 
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-8979d6362763c03a43613b7635ab39cb94c9a51a.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-9eebbb4c28844df1693e00583bdb5d5e420f561d.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="daa2783c5e148426f8333ff0cc34389527584520">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-bae6fae592d0392c71078b13444dfec5443e74c5.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-a0ab97b0083f7c0cdff29be7bc9f44f281b6c596.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/libs/gson-2.3.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/gson-2.3.1-b0b7620b0d080ad8e4878ca8dade44c390f18bbd.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-9a6f6ce98cc4255e5a2914b97a8f27ed96840eb4.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-5704b5ea44abf86c08630c7a3ca479ad7b5f01d4.jar" />
-    </item>
-    <item
-        jar="/home/peter/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-aeb9663104fcd1879426e2e9c6945a9b6d5f26cf.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-efffd1aa77f70c5720707ca672a53af8547629aa.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/net.steamcrafted/load-toast/1.0.6/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="f0b653f07052064570b06767e9b4b0b6a29397af">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-26b03423febd9af249b56030438f0395e57a9591.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/libs/internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-9223885f56ab5e32002c11b21aa5dfe62343a8fe.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-f665a6e33c4d83c029bbe41f7503b91c4c13cef4.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-9a0e80461450a2219b70baa70cd279cc5030687c.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-803977174d6b4582223a659edd09eb3efdad1dd2.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-ac0bcba642e9381b33ee1ca033cb1f32a86e9eba.jar" />
-    </item>
-    <item
-        jar="/home/peter/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/library-2.4.0-0d25bb0308cf83bf8ca936c4fbc6022ddb448d47.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/library-2.4.0_751338b62b8a29364c02e7417f22ad4697561714/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.github.navasmdc/MaterialDesign/1.4/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
-        sha1="87405405e403de68f4057757b8a2e8de02bd65d0">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-f27c25e1e6670cc12110aafe7579f8bca207c4b7.jar" />
+        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-analytics-7.0.0_ebcdefbb6f047d728b07ebbd6058c97326b4326c/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-1753f8fb8187d2a7cf78aeb9c71d7df54bde964a.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-1585ba533e174793233c77e4fcded30b389f9a9c.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-517e1422e1fa0ef46a5bfb48d7349d64d21969cb.jar" />
-    </item>
-    <item
-        jar="/home/peter/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.3/a85588bec3e2c4584d593d3f15df1677321bca72/universal-image-loader-1.9.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.3-ff5f3ed870655097b06e2cbe69d49be4602b9065.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-b14bd4ff3e713562049320eac1e2053e283bc53e.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-be521ac3d58acc76cb93acdc99191a95f6661bfd.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-e71d65e4fac41ee9dacfc84b15686fa95d6aa26b.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-22.0.0_c2575249cc8385ddd758debcda4dfdcfe7ce4bda/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.astuetz/pagerslidingtabstrip/1.0.1/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-21.0.3_f73fb71e11180c7eb04710cdf0922740582e8ad3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appstate-7.0.0_b9ae44b54f5fcc249e4c6c4577095d34f407e6c4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.astuetz/pagerslidingtabstrip/1.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="7912610ed96381c25c36d986eba422731b9641b6">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/release/classes-d257e72ca5b66c1f9061dc7fb429997ae091822c.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.astuetz-pagerslidingtabstrip-1.0.1_e7a397f457c604c7c16ae324b9dbf2434cf52f0c/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-panorama-7.0.0_04ac1327d2627282883555f89b4edf286fb78890/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-7.0.0_ebfa48f782a00119a8b1b97a7d300265181c8d92/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.github.navasmdc/MaterialDesign/1.4/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="87405405e403de68f4057757b8a2e8de02bd65d0">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.navasmdc-MaterialDesign-1.4_a95000cf141000f7430323710f43c6aaba4faf44/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-daf2f61f495901b8c2c6358c8da9f78d910f516f.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-22.0.0_b17eac0c66dba04e82b57a7f16aae4d684233866/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/net.steamcrafted/load-toast/1.0.6/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
-        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-35cda1c5d261f37addbcbe1aaf9c4bae2995cb1b.jar" />
+        sha1="f0b653f07052064570b06767e9b4b0b6a29397af">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/net.steamcrafted-load-toast-1.0.6_9f51175099f94f7067fbb0b663760d995256f98a/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-7.0.0_39c9c28b5851958669580b4a839bf447635db4b2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-ee5e455ba10f7bdea35ae6c5838c58d0da22a402.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-7.0.0_d8634d236718bbbefc07dca9393a2b83eeae0c5a/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
-        sha1="055783146ba9654a725442563be78cad303aad1f">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-21ebd98749b9ee26ece1032905467022c04fa1ac.jar" />
+        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wearable-7.0.0_20459882247fff5ae5349059417b7c02b1a8e81d/classes.dex" />
     </item>
     <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.3/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-6edbdfefcd2e94867cb8a6a8b051027ecab3fd0c.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-cf5ea846e3a203caf500adfdd1f352d705c75459.jar" />
-    </item>
-    <item
-        jar="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.0.0/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="21.1.2"
         sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
-        <dex dex="/home/peter/AndroidStudioProjects/berryestimator/app/build/intermediates/pre-dexed/debug/classes-827079b6323019a982b3655680ad16da0ad5a75a.jar" />
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appindexing-7.0.0_38ba5f72258e104886a0b17894fec06d29648cf5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-identity-7.0.0_30e45342b0752faa04442ab8394558c67592e6e1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-22.0.0_e118682100c0b792edabea9be89360366a00e2e6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-maps-7.0.0_da2b9eb8599dfbc48c110d854fdd3f0de52345fc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.3/a85588bec3e2c4584d593d3f15df1677321bca72/universal-image-loader-1.9.3.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/universal-image-loader-1.9.3_83d2951e57225b3ac066c55465042ec0034cfae3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-nearby-7.0.0_be0a9ab5c2f579095d3be9f06df5654714e975c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-fitness-7.0.0_8be27f145e75c9c70c0ef2118cc8fad57a5ce8ae/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-7.0.0_a102063fde965f51730a0144b5a925fc627346ce/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-7.0.0_2c3c618e3c0ce42273419baeaec5c57a8fe7cbdb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/libs/gson-2.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/2/gson-2.3.1_022ae2168d549cc443690fbcc485c3dd98b4c592/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-safetynet-7.0.0_07f16e3bb54df4b89381bc146110b0b5adb5c384/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.3/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-21.0.3_3acab35fe2a65ab6ed7e865bfa718ca0904dbcf2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="30cf63f7b665b8acbc001fbfbe7ae146ccd2114d">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ddfbb85307cea30580091915f9a98841d313579d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/libs/internal_impl-22.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-22.0.0_354613735f69a15fdfbe4c0814b7cee1300b2dc7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="055783146ba9654a725442563be78cad303aad1f">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-games-7.0.0_30ebeae97ad7d11bd6bab343431fc85cbce16d27/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="0620aba95894a62d3f9271ee8d348018134b89ac">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_c1b392855e01adf20f2cb7089fe0ac5a7a0a0d0f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="daa2783c5e148426f8333ff0cc34389527584520">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.clans-fab-1.5.0_424b46bd3b8e16fb90251428cbb93b39a5594e49/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wallet-7.0.0_0c1a7eec99edb135dc175531e0a4145f516f87a4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-drive-7.0.0_3043565232eea47297225a9cc3b34c4cf8ab6412/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.1.2"
+        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-7.0.0_aad044191a54d0bbf7a00262835f125eb144a77b/classes.dex" />
     </item>
 
 </items>

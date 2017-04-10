@@ -174,11 +174,13 @@ public class CreateImageRecordActivity extends ActionBarActivity {
         ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), imageView, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
-                    Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
-                    if(loadedImage.hasAlpha()) {
-                        showTempInfo("Alpha value detected in chosen image");
-                    } else {
-                        showTempInfo("No alpha value detected in chosen image");
+                    if (loadedImage != null) {
+                        Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
+                        if(loadedImage.hasAlpha()) {
+                            showTempInfo("Alpha value detected in chosen image");
+                        } else {
+                            showTempInfo("No alpha value detected in chosen image");
+                        }
                     }
                 }
             });
