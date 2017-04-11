@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
@@ -126,10 +127,10 @@ public class MyUtils {
     }
 
     public static String getCompressedImageString(Context ct, String imagePath) {
-        return compressBitmapToString(getCompressedImage(ct, imagePath));
+        return compressBitmapToString(getResizedImage(ct, imagePath));
     }
 
-    public static Bitmap getCompressedImage(Context ct, String imagePath) {
+    public static Bitmap getResizedImage(Context ct, String imagePath) {
         InputStream stream = null;
         Bitmap bm = null;
         try {
@@ -175,8 +176,10 @@ public class MyUtils {
             return null;
 
         byte[] bytes = Base64.decode(imageBase64, Base64.DEFAULT);
+        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        // return mutable bitmap
+        return bmp.copy(Bitmap.Config.ARGB_8888, true);
     }
 
     // resize bitmap based on the shortest side
@@ -200,6 +203,17 @@ public class MyUtils {
         return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
     }
 
+    // use CIE76 ΔE*ab to compute color similarity
+    // reuturn a double value in [0, 1], 0 means no difference
+    public static boolean colorsAreSimilar(int a, int b) {
+        int redDiff = Color.red(a) - Color.red(b);
+        int blueDiff = Color.blue(a) - Color.blue(b);
+        int greenDiff = Color.green(a) - Color.green(b);
+
+        double deltaE = Math.sqrt(2*redDiff*redDiff + 4*blueDiff*blueDiff + 3*greenDiff*greenDiff);
+//        Log.d("--", "deltaE: " + deltaE);
+        return deltaE < 80;
+    }
 
     public static String getTimeString(long time) {
         SimpleDateFormat format = new SimpleDateFormat("h:mm a", Locale.getDefault());

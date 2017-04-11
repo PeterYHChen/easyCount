@@ -3,10 +3,13 @@ package com.example.peter.berryestimator;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.SimpleArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +42,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * A fragment representing a list of Items.
@@ -277,7 +283,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     @Override
@@ -451,9 +457,10 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
 
             String imageString = null;
             Cursor cursor = dbManager.findRowCursor(imageRecord);
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
+                }
             }
             cursor.close();
 
@@ -478,8 +485,91 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                 postData = imageRecordData + "&" + imageData + "&" + imageMd5Data;
             }
 
-            return sendDataToServer(postData);
+//            return sendDataToServer(postData);
+            return performNaiveEstimation(imageString);
         }
+
+        private boolean performNaiveEstimation(String imageString) {
+            boolean isSuccessReturned = true;
+
+            Bitmap bm = MyUtils.decodeBitmapFromString(imageString);
+            boolean[][] isObject = new boolean[bm.getWidth()][bm.getHeight()];
+            boolean[][] markCnt = new boolean[bm.getWidth()][bm.getHeight()];
+            int objectCnt = 0;
+            int percentage = 0;
+
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    // init markCnt to all false
+                    markCnt[x][y] =false;
+
+                    // perform similarity check
+                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#E2E7D1"));
+
+                    // update progress
+                    int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+                    while (percentage < newPercent) {
+                        percentage++;
+                        publishProgress(percentage);
+                    }
+                }
+            }
+
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    if (isObject[x][y]) {
+                        bm.setPixel(x, y, Color.WHITE);
+
+                        // use bfs to mark all adjacent object pixels to recognize as one object
+                        if (!markCnt[x][y]) {
+                            objectCnt++;
+                            AbstractMap.SimpleEntry<Integer, Integer> pos =
+                                    new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
+                            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
+                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
+                            queue.add(pos);
+
+                            while (!queue.isEmpty()) {
+                                AbstractMap.SimpleEntry<Integer, Integer> currPos = queue.poll();
+                                int xPos = currPos.getKey();
+                                int yPos = currPos.getValue();
+
+                                // skip invalid pixel position
+                                if (xPos < 0 || xPos >= bm.getWidth() || yPos < 0 || yPos >= bm.getHeight())
+                                    continue;
+
+                                // skip object pixels
+                                if (!isObject[xPos][yPos])
+                                    continue;
+
+                                // skip pixels that have been marked already
+                                if (markCnt[xPos][yPos])
+                                    continue;
+
+                                markCnt[xPos][yPos] = true;
+                                for (int i = 0; i < 16; i += 2) {
+                                    queue.add(new AbstractMap.SimpleEntry<Integer, Integer>(xPos + offset[i], yPos + offset[i+1]));
+                                }
+                            }
+                        }
+                    } else {
+                        bm.setPixel(x, y, Color.BLACK);
+                    }
+
+                    // update progress
+                    int newPercent = 50 + (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+                    while (percentage < newPercent) {
+                        percentage++;
+                        publishProgress(percentage);
+                    }
+                }
+            }
+            result = new Result();
+            result.densityImage = MyUtils.compressBitmapToString(bm);
+            result.estimate = String.valueOf(objectCnt);
+            return isSuccessReturned;
+        }
+
         // TODO: add get, put and remove request after adding users
         private boolean sendDataToServer(String postDataString) {
             URL url;
