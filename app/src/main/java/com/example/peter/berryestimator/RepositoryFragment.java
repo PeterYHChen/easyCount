@@ -44,6 +44,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -515,6 +516,10 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                 }
             }
 
+            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
+            int[] objectPixelCntSum = new int[100];
+            Arrays.fill(objectPixelCntSum, 0);
+
             for (int x = 0; x < bm.getWidth(); x++) {
                 for (int y = 0; y < bm.getHeight(); y++) {
                     if (isObject[x][y]) {
@@ -525,10 +530,11 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                             objectCnt++;
                             AbstractMap.SimpleEntry<Integer, Integer> pos =
                                     new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
-                            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
                             Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
+                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> resumeQ = new LinkedList<>();
                             queue.add(pos);
 
+                            int objectSize = 0;
                             while (!queue.isEmpty()) {
                                 AbstractMap.SimpleEntry<Integer, Integer> currPos = queue.poll();
                                 int xPos = currPos.getKey();
@@ -546,11 +552,25 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                                 if (markCnt[xPos][yPos])
                                     continue;
 
+                                objectSize++;
                                 markCnt[xPos][yPos] = true;
+                                resumeQ.add(currPos);
+
                                 for (int i = 0; i < 16; i += 2) {
                                     queue.add(new AbstractMap.SimpleEntry<Integer, Integer>(xPos + offset[i], yPos + offset[i+1]));
                                 }
                             }
+                            if (objectSize >= 100 || objectSize <= 10) {
+                                objectCnt--;
+                                while (!resumeQ.isEmpty()) {
+                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
+                                    resumeQ.poll();
+                                }
+                            }
+                            if (objectSize >= 100)
+                                objectPixelCntSum[objectPixelCntSum.length-1]++;
+                            else
+                                objectPixelCntSum[objectSize]++;
                         }
                     } else {
                         bm.setPixel(x, y, Color.BLACK);
@@ -564,6 +584,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                     }
                 }
             }
+            int len = objectPixelCntSum.length;
             result = new Result();
             result.densityImage = MyUtils.compressBitmapToString(bm);
             result.estimate = String.valueOf(objectCnt);
