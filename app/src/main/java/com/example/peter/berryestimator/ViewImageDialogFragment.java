@@ -72,6 +72,7 @@ public class ViewImageDialogFragment extends DialogFragment {
 
         touchImageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
         touchDensityImageView.setImageBitmap(MyUtils.decodeBitmapFromString(densityImageString));
+
         touchDensityImageView.setVisibility(densityImageString == null ? View.GONE : View.VISIBLE);
         transparentSlider.setVisibility(densityImageString == null ? View.GONE : View.VISIBLE);
 
@@ -93,12 +94,13 @@ public class ViewImageDialogFragment extends DialogFragment {
         transparentSlider.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int i) {
-                touchDensityImageView.setAlpha(i);
+                touchImageView.setImageAlpha(255-i);
+                touchDensityImageView.setImageAlpha(i);
             }
         });
 
         transparentSlider.setValue(120);
-        touchDensityImageView.setAlpha(120);
+        touchDensityImageView.setImageAlpha(120);
 
         return view;
     }

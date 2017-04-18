@@ -31,7 +31,7 @@ public class RecordInfoDialogFragment extends DialogFragment{
     private DBManager dbManager;
 
     private ImageButton closeButton;
-    private ImageView imageVIew;
+    private ImageView imageView;
     private ImageView densityImageView;
     private Slider transparentSlider;
 
@@ -90,7 +90,7 @@ public class RecordInfoDialogFragment extends DialogFragment{
         View view = inflater.inflate(R.layout.dialog_record_info, container, false);
 
         closeButton = (ImageButton)view.findViewById(R.id.close_button);
-        imageVIew = (ImageView)view.findViewById(R.id.record_image);
+        imageView = (ImageView)view.findViewById(R.id.record_image);
         densityImageView = (ImageView)view.findViewById(R.id.record_density_image);
         transparentSlider = (Slider)view.findViewById(R.id.transparent_slider);
 
@@ -138,7 +138,7 @@ public class RecordInfoDialogFragment extends DialogFragment{
         }
         cursor.close();
 
-        imageVIew.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
+        imageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
         densityImageView.setImageBitmap(MyUtils.decodeBitmapFromString(densityImageString));
 
         // TODO: try view.add to dynamically add views
@@ -160,7 +160,7 @@ public class RecordInfoDialogFragment extends DialogFragment{
             }
         };
 
-        imageVIew.setOnClickListener(onImageClickListener);
+        imageView.setOnClickListener(onImageClickListener);
         densityImageView.setOnClickListener(onImageClickListener);
         expandedImageVIew.setOnClickListener(onImageClickListener);
         expandedDensityImageView.setOnClickListener(onImageClickListener);
@@ -168,12 +168,13 @@ public class RecordInfoDialogFragment extends DialogFragment{
         transparentSlider.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int i) {
-                densityImageView.setAlpha(i);
+                imageView.setImageAlpha(255-i);
+                densityImageView.setImageAlpha(i);
             }
         });
 
         transparentSlider.setValue(120);
-        densityImageView.setAlpha(120);
+        densityImageView.setImageAlpha(120);
 
         titleTextView.setText(imageRecord.getTitle());
         imageTakenDateTextView.setText("Image taken at " + MyUtils.getTimeString(imageRecord.getImageTakenDate())

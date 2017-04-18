@@ -97,7 +97,7 @@ public class ImageRecordListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         Bitmap bitmap = MyUtils.decodeBitmapFromString(imageRecord.getCompressedThumbnailString());
         imageRecordViewHolder.recordImage.setImageBitmap(bitmap);
 
-        MyUtils.logImageRecord(imageRecord);
+//        MyUtils.logImageRecord(imageRecord);
 //        imageRecordViewHolder.recordTitle.setText(imageRecord.getRecordId() + "--" + imageRecord.getTitle());
         imageRecordViewHolder.recordTitle.setText(imageRecord.getTitle());
         imageRecordViewHolder.recordCreatedDate.setText("Created: " + MyUtils.getProperTimeString(imageRecord.getCreatedDate()));
