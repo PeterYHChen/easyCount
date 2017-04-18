@@ -33,6 +33,18 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -46,6 +58,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -107,6 +120,11 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             mAdapter = new ImageRecordListAdapter(this);
         }
 
+        if (!OpenCVLoader.initDebug()) {
+            Log.e(this.getClass().getSimpleName(), "  OpenCVLoader.initDebug(), not working.");
+        } else {
+            Log.d(this.getClass().getSimpleName(), "  OpenCVLoader.initDebug(), working.");
+        }
     }
 
     @Override
@@ -494,101 +512,273 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             boolean isSuccessReturned = true;
 
             Bitmap bm = MyUtils.decodeBitmapFromString(imageString);
-            boolean[][] isObject = new boolean[bm.getWidth()][bm.getHeight()];
-            boolean[][] markCnt = new boolean[bm.getWidth()][bm.getHeight()];
-            int objectCnt = 0;
-            int percentage = 0;
-
-            for (int x = 0; x < bm.getWidth(); x++) {
-                for (int y = 0; y < bm.getHeight(); y++) {
-                    // init markCnt to all false
-                    markCnt[x][y] =false;
-
-                    // perform similarity check
-                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#E2E7D1"));
-
-                    // update progress
-                    int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
-                    while (percentage < newPercent) {
-                        percentage++;
-                        publishProgress(percentage);
-                    }
-                }
-            }
-
-            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
-            int[] objectPixelCntSum = new int[100];
-            Arrays.fill(objectPixelCntSum, 0);
-
-            for (int x = 0; x < bm.getWidth(); x++) {
-                for (int y = 0; y < bm.getHeight(); y++) {
-                    if (isObject[x][y]) {
-                        bm.setPixel(x, y, Color.WHITE);
-
-                        // use bfs to mark all adjacent object pixels to recognize as one object
-                        if (!markCnt[x][y]) {
-                            objectCnt++;
-                            AbstractMap.SimpleEntry<Integer, Integer> pos =
-                                    new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
-                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
-                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> resumeQ = new LinkedList<>();
-                            queue.add(pos);
-
-                            int objectSize = 0;
-                            while (!queue.isEmpty()) {
-                                AbstractMap.SimpleEntry<Integer, Integer> currPos = queue.poll();
-                                int xPos = currPos.getKey();
-                                int yPos = currPos.getValue();
-
-                                // skip invalid pixel position
-                                if (xPos < 0 || xPos >= bm.getWidth() || yPos < 0 || yPos >= bm.getHeight())
-                                    continue;
-
-                                // skip object pixels
-                                if (!isObject[xPos][yPos])
-                                    continue;
-
-                                // skip pixels that have been marked already
-                                if (markCnt[xPos][yPos])
-                                    continue;
-
-                                objectSize++;
-                                markCnt[xPos][yPos] = true;
-                                resumeQ.add(currPos);
-
-                                for (int i = 0; i < 16; i += 2) {
-                                    queue.add(new AbstractMap.SimpleEntry<Integer, Integer>(xPos + offset[i], yPos + offset[i+1]));
-                                }
-                            }
-                            if (objectSize >= 100 || objectSize <= 10) {
-                                objectCnt--;
-                                while (!resumeQ.isEmpty()) {
-                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
-                                    resumeQ.poll();
-                                }
-                            }
-                            if (objectSize >= 100)
-                                objectPixelCntSum[objectPixelCntSum.length-1]++;
-                            else
-                                objectPixelCntSum[objectSize]++;
-                        }
-                    } else {
-                        bm.setPixel(x, y, Color.BLACK);
-                    }
-
-                    // update progress
-                    int newPercent = 50 + (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
-                    while (percentage < newPercent) {
-                        percentage++;
-                        publishProgress(percentage);
-                    }
-                }
-            }
-            int len = objectPixelCntSum.length;
+//            boolean[][] isObject = new boolean[bm.getWidth()][bm.getHeight()];
+//            boolean[][] markCnt = new boolean[bm.getWidth()][bm.getHeight()];
+//            int objectCnt = 0;
+//            int percentage = 0;
+//
+//            for (int x = 0; x < bm.getWidth(); x++) {
+//                for (int y = 0; y < bm.getHeight(); y++) {
+//                    // init markCnt to all false
+//                    markCnt[x][y] =false;
+//
+//                    // perform similarity check
+//                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#D8C09E"));
+//
+//                    // update progress
+//                    int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+//                    while (percentage < newPercent) {
+//                        percentage++;
+//                        publishProgress(percentage);
+//                    }
+//                }
+//            }
+//
+//            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
+//            int[] objectPixelCntSum = new int[100];
+//            Arrays.fill(objectPixelCntSum, 0);
+//
+//            for (int x = 0; x < bm.getWidth(); x++) {
+//                for (int y = 0; y < bm.getHeight(); y++) {
+//                    if (isObject[x][y]) {
+//                        bm.setPixel(x, y, Color.WHITE);
+//
+//                        // use bfs to mark all adjacent object pixels to recognize as one object
+//                        if (!markCnt[x][y]) {
+//                            objectCnt++;
+//                            AbstractMap.SimpleEntry<Integer, Integer> pos =
+//                                    new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
+//                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
+//                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> resumeQ = new LinkedList<>();
+//                            queue.add(pos);
+//
+//                            int objectSize = 0;
+//                            while (!queue.isEmpty()) {
+//                                AbstractMap.SimpleEntry<Integer, Integer> currPos = queue.poll();
+//                                int xPos = currPos.getKey();
+//                                int yPos = currPos.getValue();
+//
+//                                // skip invalid pixel position
+//                                if (xPos < 0 || xPos >= bm.getWidth() || yPos < 0 || yPos >= bm.getHeight())
+//                                    continue;
+//
+//                                // skip object pixels
+//                                if (!isObject[xPos][yPos])
+//                                    continue;
+//
+//                                // skip pixels that have been marked already
+//                                if (markCnt[xPos][yPos])
+//                                    continue;
+//
+//                                objectSize++;
+//                                markCnt[xPos][yPos] = true;
+//                                resumeQ.add(currPos);
+//
+//                                for (int i = 0; i < 16; i += 2) {
+//                                    queue.add(new AbstractMap.SimpleEntry<Integer, Integer>(xPos + offset[i], yPos + offset[i+1]));
+//                                }
+//                            }
+//                            if (objectSize >= 100 || objectSize <= 10) {
+//                                objectCnt--;
+//                                while (!resumeQ.isEmpty()) {
+//                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
+//                                    bm.setPixel(resumeQ.peek().getKey(), resumeQ.peek().getValue(), Color.BLACK);
+//                                    resumeQ.poll();
+//                                }
+//                            }
+//                            if (objectSize >= 100)
+//                                objectPixelCntSum[objectPixelCntSum.length-1]++;
+//                            else
+//                                objectPixelCntSum[objectSize]++;
+//                        }
+//                    } else {
+//                        bm.setPixel(x, y, Color.BLACK);
+//                    }
+//
+//                    // update progress
+//                    int newPercent = 50 + (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+//                    while (percentage < newPercent) {
+//                        percentage++;
+//                        publishProgress(percentage);
+//                    }
+//                }
+//            }
+//            int len = objectPixelCntSum.length;
             result = new Result();
-            result.densityImage = MyUtils.compressBitmapToString(bm);
-            result.estimate = String.valueOf(objectCnt);
+            result.densityImage = MyUtils.compressBitmapToString(detectCircles(bm));
+//            result.estimate = String.valueOf(objectCnt);
             return isSuccessReturned;
+        }
+
+
+        private Bitmap detect(Bitmap bitmap) {
+            // Consider the image for processing
+            Mat image = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageHSV = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageBlurr = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageA = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+
+            Utils.bitmapToMat(bitmap, image);
+
+            Imgproc.cvtColor(image, imageHSV, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.GaussianBlur(imageHSV, imageBlurr, new Size(3,3), 0);
+            Imgproc.adaptiveThreshold(imageBlurr, imageA, 255,Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY,7, 3);
+
+            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+            Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_SIMPLE);
+
+            for(int i=0; i< contours.size();i++){
+                System.out.println(Imgproc.contourArea(contours.get(i)));
+                double area = Imgproc.contourArea(contours.get(i));
+                if (area < 30 && area > 5) {
+                    Imgproc.drawContours(image, contours, i, new Scalar(255, 255, 255), -1);
+//                    Rect rect = Imgproc.boundingRect(contours.get(i));
+////                    if (rect.height > 5){
+////                        Imgproc.rectangle(image, new Point(rect.x,rect.y), new Point(rect.width,rect.height),new Scalar(0,0,255));
+//                        Imgproc.circle(image, new Point(rect.x,rect.y), 1, new Scalar(0, 255, 0), 4);
+////                    }
+                }
+            }
+            Utils.matToBitmap(image, bitmap);
+            return bitmap;
+        }
+
+
+        private Bitmap detectContours(Bitmap bitmap) {
+            // Consider the image for processing
+            Mat image = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageHSV = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageBlurr = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+            Mat imageA = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
+
+            Utils.bitmapToMat(bitmap, image);
+
+            Imgproc.cvtColor(image, imageHSV, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.GaussianBlur(imageHSV, imageBlurr, new Size(5,5), 2, 2);
+            Imgproc.adaptiveThreshold(imageBlurr, imageA, 255,Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 9, 3);
+
+            // accumulator value
+            double dp = 1;
+            // minimum distance between the center coordinates of detected circles in pixels
+            double minDist = 5;
+
+            // min and max radii (set these values as you desire)
+            int minRadius = 0, maxRadius = 15;
+
+            // param1 = gradient value used to handle edge detection
+            // param2 = Accumulator threshold value for the
+            // cv2.CV_HOUGH_GRADIENT method.
+            // The smaller the threshold is, the more circles will be
+            // detected (including false circles).
+            // The larger the threshold is, the more circles will
+            // potentially be returned.
+            double param1 = 100, param2 = 10;
+
+            /* create a Mat object to store the circles detected */
+            Mat circles = new Mat(bitmap.getWidth(),
+                    bitmap.getHeight(), CvType.CV_8UC1);
+
+            /* find the circle in the image */
+            Imgproc.HoughCircles(imageA, circles,
+                    Imgproc.CV_HOUGH_GRADIENT, dp, minDist, param1,
+                    param2, minRadius, maxRadius);
+
+            /* get the number of circles detected */
+            int numberOfCircles = circles.cols();
+
+            /* draw the circles found on the image */
+            for (int i=0; i<numberOfCircles; i++) {
+                /* get the circle details, circleCoordinates[0, 1, 2] = (x,y,r)
+                 * (x,y) are the coordinates of the circle's center
+                 */
+                double[] circleCoordinates = circles.get(0, i);
+
+
+                int x = (int) circleCoordinates[0], y = (int) circleCoordinates[1];
+
+                Point center = new Point(x, y);
+
+                int radius = (int) circleCoordinates[2];
+
+                /* circle's outline */
+                Imgproc.circle(image, center, radius, new Scalar(255,
+                        0, 0), 4);
+            }
+
+            /* convert back to bitmap */
+            Utils.matToBitmap(imageA, bitmap);
+            return bitmap;
+        }
+
+        private Bitmap detectCircles(Bitmap bitmap) {
+            /* convert bitmap to mat */
+            Mat mat = new Mat(bitmap.getWidth(), bitmap.getHeight(),
+                    CvType.CV_8UC1);
+            Mat grayMat = new Mat(bitmap.getWidth(), bitmap.getHeight(),
+                    CvType.CV_8UC1);
+
+            Utils.bitmapToMat(bitmap, mat);
+
+            /* convert to grayscale */
+            int colorChannels = (mat.channels() == 3) ? Imgproc.COLOR_BGR2GRAY
+                    : ((mat.channels() == 4) ? Imgproc.COLOR_BGRA2GRAY : 1);
+
+            Imgproc.cvtColor(mat, grayMat, colorChannels);
+//            Imgproc.equalizeHist(grayMat, grayMat);
+            /* reduce the noise so we avoid false circle detection */
+            Imgproc.GaussianBlur(grayMat, grayMat, new Size(11, 11), 2, 2);
+
+            // accumulator value
+            double dp = 1;
+            // minimum distance between the center coordinates of detected circles in pixels
+            double minDist = 5;
+
+            // min and max radii (set these values as you desire)
+            int minRadius = 2, maxRadius = 12;
+
+            // param1 = gradient value used to handle edge detection
+            // param2 = Accumulator threshold value for the
+            // cv2.CV_HOUGH_GRADIENT method.
+            // The smaller the threshold is, the more circles will be
+            // detected (including false circles).
+            // The larger the threshold is, the more circles will
+            // potentially be returned.
+            double param1 = 30, param2 = 10;
+
+            /* create a Mat object to store the circles detected */
+            Mat circles = new Mat(bitmap.getWidth(),
+                    bitmap.getHeight(), CvType.CV_8UC1);
+
+            /* find the circle in the image */
+            Imgproc.HoughCircles(grayMat, circles,
+                    Imgproc.CV_HOUGH_GRADIENT, dp, minDist, param1,
+                    param2, minRadius, maxRadius);
+
+            /* get the number of circles detected */
+            int numberOfCircles = circles.cols();
+
+            /* draw the circles found on the image */
+            for (int i=0; i<numberOfCircles; i++) {
+                /* get the circle details, circleCoordinates[0, 1, 2] = (x,y,r)
+                 * (x,y) are the coordinates of the circle's center
+                 */
+                double[] circleCoordinates = circles.get(0, i);
+
+
+                int x = (int) circleCoordinates[0], y = (int) circleCoordinates[1];
+
+                Point center = new Point(x, y);
+
+                int radius = (int) circleCoordinates[2];
+
+                /* circle's outline */
+                Imgproc.circle(mat, center, 2, new Scalar(0,
+                        255, 0), 4);
+            }
+
+            /* convert back to bitmap */
+            Utils.matToBitmap(mat, bitmap);
+            return bitmap;
         }
 
         // TODO: add get, put and remove request after adding users
@@ -787,7 +977,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
         }
 
         public class Result {
-            public String estimate;
+            public String estimate = "0";
             public String densityImage;
             public String objectImage;
         }

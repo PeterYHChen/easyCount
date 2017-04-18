@@ -182,7 +182,10 @@ public class MyUtils {
         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
         // return mutable bitmap
-        return bmp.copy(Bitmap.Config.ARGB_8888, true);
+        if (bmp != null)
+            bmp = bmp.copy(Bitmap.Config.ARGB_8888, true);
+
+        return bmp;
     }
 
     // resize bitmap based on the shortest side
