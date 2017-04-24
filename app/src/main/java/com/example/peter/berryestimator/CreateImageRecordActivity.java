@@ -115,7 +115,14 @@ public class CreateImageRecordActivity extends ActionBarActivity {
 
         } else {
             // if edit record event, display data from image record
-            targetTypeSpinner.setSelection(targetTypeAdapter.getPosition(imageRecord.getTargetType()));
+
+            // check if target type exists
+            int pos = targetTypeAdapter.getPosition(imageRecord.getTargetType());
+            if (pos >= 0)
+                targetTypeSpinner.setSelection(pos);
+            else
+                targetTypeSpinner.setSelection(0);
+
 
             titleEditText.setText(imageRecord.getTitle().equals(NO_TITLE) ? "" : imageRecord.getTitle());
             imageLocationEditText.setText(imageRecord.getImageLocation());

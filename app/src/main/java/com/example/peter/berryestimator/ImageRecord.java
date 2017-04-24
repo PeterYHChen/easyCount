@@ -5,8 +5,14 @@ import android.os.Parcelable;
 import android.text.BoringLayout;
 
 import java.util.Date;
+import java.util.Map;
 
 public class ImageRecord implements Parcelable{
+    public static final String MODEL_HOUGHCIRCLES = "Hough Circles";
+    public static final String MODEL_NAIVE = "Naive";
+    public static final String MODEL_CONTOURS = "Contours";
+    public static final String MODEL_NAIVE_GRAYSCALE = "Naive Grayscale";
+    public static final String MODEL_IGNORE_BACKGROUND = "Ignore Background";
 
     private String compressedThumbnailString;
     private String imagePath;

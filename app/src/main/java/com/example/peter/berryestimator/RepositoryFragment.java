@@ -299,10 +299,11 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
 
     // check for internet availability
     public boolean internetIsConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+//        ConnectivityManager connMgr = (ConnectivityManager)
+//                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        return true;
     }
 
     @Override
@@ -488,10 +489,6 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             String imageData = "image=" + imageString;
             String imageMd5Data = "imageMd5=" + MyUtils.getMd5(imageString);
 
-//            Log.d("imageRecord", imageRecordData);
-//            Log.d("image", imageData);
-//            Log.d("image MD5", imageMd5Data);
-
             Log.d("record size", imageRecordData.length() / 1024 + "KB");
             Log.d("image size", imageData.length() / 1024 + "KB");
 
@@ -505,16 +502,25 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             }
 
 //            return sendDataToServer(postData);
-            return performNaiveEstimation(imageString);
+            return performNaiveEstimation(imageRecord, imageString);
         }
 
-        private boolean performNaiveEstimation(String imageString) {
+        private boolean performNaiveEstimation(ImageRecord imageRecord, String imageString) {
             boolean isSuccessReturned = true;
 
             Bitmap bm = MyUtils.decodeBitmapFromString(imageString);
 
             result = new Result();
-            result.densityImage = MyUtils.compressBitmapToString(detectCircles(bm));
+            if (imageRecord.getTargetType().equals(ImageRecord.MODEL_HOUGHCIRCLES))
+                result.densityImage = MyUtils.compressBitmapToString(detectCircles(naiveDetectGrayscale(bm)));
+            else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_NAIVE))
+                result.densityImage = MyUtils.compressBitmapToString(naiveDetect(bm));
+            else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_CONTOURS))
+                result.densityImage = MyUtils.compressBitmapToString(detectContours(bm));
+            else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_NAIVE_GRAYSCALE))
+                result.densityImage = MyUtils.compressBitmapToString(naiveDetectGrayscale(bm));
+            else
+                result.densityImage = MyUtils.compressBitmapToString(detectIgnoreBackground(bm));
 //            result.estimate = String.valueOf(objectCnt);
             return isSuccessReturned;
         }
@@ -531,7 +537,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                     markCnt[x][y] =false;
 
                     // perform similarity check
-                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#D8C09E"));
+                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#D8C09E"), 80);
 
                     // update progress
                     int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
@@ -570,7 +576,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
                                 if (xPos < 0 || xPos >= bm.getWidth() || yPos < 0 || yPos >= bm.getHeight())
                                     continue;
 
-                                // skip object pixels
+                                // skip not object pixels
                                 if (!isObject[xPos][yPos])
                                     continue;
 
@@ -616,19 +622,258 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             return bm;
         }
 
+        private Bitmap naiveDetectGrayscale(Bitmap bm) {
+            Mat mat = new Mat(bm.getWidth(), bm.getHeight(), CvType.CV_8UC1);
+            Utils.bitmapToMat(bm, mat);
+            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY);
+            Utils.matToBitmap(mat, bm);
+
+            int percentage = 0;
+
+            float[] hsv = new float[3];
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    Color.colorToHSV(bm.getPixel(x, y), hsv);
+                    // satuation
+//                    Log.d("value",""+hsv[2]);
+                    if (hsv[2] < 0.58)
+                        bm.setPixel(x, y, Color.BLACK);
+
+                    // update progress
+                    int newPercent = (x + 1)*(y + 1)*100 / (bm.getWidth()*bm.getHeight());
+                    while (percentage < newPercent) {
+                        percentage++;
+                        publishProgress(percentage);
+                    }
+                }
+            }
+//            boolean[][] isObject = new boolean[bm.getWidth()][bm.getHeight()];
+//            boolean[][] markCnt = new boolean[bm.getWidth()][bm.getHeight()];
+//            int objectCnt = 0;
+//            int percentage = 0;
+//
+//            for (int x = 0; x < bm.getWidth(); x++) {
+//                for (int y = 0; y < bm.getHeight(); y++) {
+//                    // init markCnt to all false
+//                    markCnt[x][y] =false;
+//
+//                    // perform similarity check
+//                    isObject[x][y] = MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#C0C0C0"), 50);
+//
+//                    // update progress
+//                    int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+//                    while (percentage < newPercent) {
+//                        percentage++;
+//                        publishProgress(percentage);
+//                    }
+//                }
+//            }
+//
+//            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
+//            int[] objectPixelCntSum = new int[100];
+//            Arrays.fill(objectPixelCntSum, 0);
+//
+//            for (int x = 0; x < bm.getWidth(); x++) {
+//                for (int y = 0; y < bm.getHeight(); y++) {
+//                    if (isObject[x][y]) {
+//                        // use bfs to mark all adjacent object pixels to recognize as one object
+//                        if (!markCnt[x][y]) {
+//                            objectCnt++;
+//                            AbstractMap.SimpleEntry<Integer, Integer> pos =
+//                                    new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
+//                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
+//                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> resumeQ = new LinkedList<>();
+//                            queue.add(pos);
+//
+//                            int objectSize = 0;
+//                            while (!queue.isEmpty()) {
+//                                AbstractMap.SimpleEntry<Integer, Integer> currPos = queue.poll();
+//                                int xPos = currPos.getKey();
+//                                int yPos = currPos.getValue();
+//
+//                                // skip invalid pixel position
+//                                if (xPos < 0 || xPos >= bm.getWidth() || yPos < 0 || yPos >= bm.getHeight())
+//                                    continue;
+//
+//                                // skip not object pixels
+//                                if (!isObject[xPos][yPos])
+//                                    continue;
+//
+//                                // skip pixels that have been marked already
+//                                if (markCnt[xPos][yPos])
+//                                    continue;
+//
+//                                objectSize++;
+//                                markCnt[xPos][yPos] = true;
+//                                resumeQ.add(currPos);
+//
+//                                for (int i = 0; i < 16; i += 2) {
+//                                    queue.add(new AbstractMap.SimpleEntry<Integer, Integer>(xPos + offset[i], yPos + offset[i+1]));
+//                                }
+//                            }
+//                            if (objectSize >= 400 || objectSize <= 3) {
+//                                objectCnt--;
+//                                while (!resumeQ.isEmpty()) {
+//                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
+////                                    bm.setPixel(resumeQ.peek().getKey(), resumeQ.peek().getValue(), Color.BLACK);
+//                                    resumeQ.poll();
+//                                }
+//                            } else {
+//                                while (!resumeQ.isEmpty()) {
+//                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
+//                                    bm.setPixel(resumeQ.peek().getKey(), resumeQ.peek().getValue(), Color.RED);
+//                                    resumeQ.poll();
+//                                }
+//                            }
+//                            if (objectSize >= 100)
+//                                objectPixelCntSum[objectPixelCntSum.length-1]++;
+//                            else
+//                                objectPixelCntSum[objectSize]++;
+//                        }
+//                    } else {
+////                        bm.setPixel(x, y, Color.BLACK);
+//                    }
+//
+//                    // update progress
+//                    int newPercent = 50 + (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+//                    while (percentage < newPercent) {
+//                        percentage++;
+//                        publishProgress(percentage);
+//                    }
+//                }
+//            }
+//            int len = objectPixelCntSum.length;
+
+            return bm;
+        }
+        private Bitmap detectIgnoreBackground(Bitmap bm) {
+            boolean[][] isObject = new boolean[bm.getWidth()][bm.getHeight()];
+            boolean[][] markCnt = new boolean[bm.getWidth()][bm.getHeight()];
+            int objectCnt = 0;
+            int percentage = 0;
+
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    // init markCnt to all false
+                    markCnt[x][y] =false;
+
+                    // perform similarity check on non-transparent pixels
+                    if (bm.getPixel(x, y) != 0)
+                        isObject[x][y] = !MyUtils.colorsAreSimilar(bm.getPixel(x, y), Color.parseColor("#828276"), 80);
+
+                    // update progress
+                    int newPercent = (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+                    while (percentage < newPercent) {
+                        percentage++;
+                        publishProgress(percentage);
+                    }
+                }
+            }
+
+            int[] offset = {-1, 0, 1, 0, 0, -1, 0, 1, 1, 1, -1, -1, 1, -1, -1, 1};
+            int[] objectPixelCntSum = new int[100];
+            Arrays.fill(objectPixelCntSum, 0);
+
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    // update progress
+                    int newPercent = 50 + (x + 1)*(y + 1)*50 / (bm.getWidth()*bm.getHeight());
+                    while (percentage < newPercent) {
+                        percentage++;
+                        publishProgress(percentage);
+                    }
+
+                    // transparent pixel, this pixel doesn't display, skip
+                    if (bm.getPixel(x, y) == 0)
+                        continue;
+
+                    else if (isObject[x][y]) {
+                        // use bfs to mark all adjacent object pixels to recognize as one object
+                        if (!markCnt[x][y]) {
+                            objectCnt++;
+                            AbstractMap.SimpleEntry<Integer, Integer> pos =
+                                    new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
+                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> queue = new LinkedList<>();
+                            Queue<AbstractMap.SimpleEntry<Integer, Integer>> resumeQ = new LinkedList<>();
+                            queue.add(pos);
+
+                            int objectSize = 0;
+                            AbstractMap.SimpleEntry<Integer, Integer> currPos, nextPos;
+                            while (!queue.isEmpty()) {
+                                currPos = queue.poll();
+                                int xPos = currPos.getKey();
+                                int yPos = currPos.getValue();
+                                int nextXPos, nextYPos;
+
+
+                                if (objectSize > 20)
+                                    objectSize = objectSize;
+
+                                for (int i = 0; i < 16; i += 2) {
+                                    nextXPos = xPos + offset[i];
+                                    nextYPos = yPos + offset[i+1];
+
+                                    // skip invalid pixel position (out of bound or transparent)
+                                    if (nextXPos < 0 || nextXPos >= bm.getWidth()
+                                            || nextYPos < 0 || nextYPos >= bm.getHeight()
+                                            || bm.getPixel(nextXPos, nextYPos) == 0)
+                                        continue;
+
+                                    // skip not object pixels
+                                    if (!isObject[nextXPos][nextYPos])
+                                        continue;
+
+                                    // skip pixels that have been marked already
+                                    if (markCnt[nextXPos][nextYPos])
+                                        continue;
+
+                                    nextPos = new AbstractMap.SimpleEntry<Integer, Integer>(nextXPos, nextYPos);
+                                    objectSize++;
+                                    resumeQ.add(nextPos);
+                                    markCnt[nextXPos][nextYPos] = true;
+
+                                    queue.add(nextPos);
+                                }
+                            }
+                            if (objectSize >= 400 || objectSize <= 3) {
+                                objectCnt--;
+//                                while (!resumeQ.isEmpty()) {
+//                                    isObject[resumeQ.peek().getKey()][resumeQ.peek().getValue()] = false;
+//                                    bm.setPixel(resumeQ.peek().getKey(), resumeQ.peek().getValue(), Color.BLACK);
+//                                    resumeQ.poll();
+//                                }
+                            } else {
+                                while (!resumeQ.isEmpty()) {
+                                    bm.setPixel(resumeQ.peek().getKey(), resumeQ.peek().getValue(), Color.RED);
+                                    resumeQ.poll();
+                                }
+                            }
+                            if (objectSize >= 100)
+                                objectPixelCntSum[objectPixelCntSum.length-1]++;
+                            else
+                                objectPixelCntSum[objectSize]++;
+                        }
+                    } else {
+                        bm.setPixel(x, y, Color.BLACK);
+                    }
+                }
+            }
+            int len = objectPixelCntSum.length;
+
+            result.estimate = objectCnt;
+            return bm;
+        }
         private Bitmap detectContours(Bitmap bitmap) {
             // Consider the image for processing
             Mat image = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
-            Mat imageHSV = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
-            Mat imageBlurr = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
             Mat imageA = new Mat(bitmap.getWidth(), bitmap.getHeight(), CvType.CV_8UC1);
 
             Utils.bitmapToMat(bitmap, image);
 
-            Imgproc.cvtColor(image, imageHSV, Imgproc.COLOR_BGR2GRAY);
-            Imgproc.GaussianBlur(imageHSV, imageBlurr, new Size(5,5), 0);
-            Imgproc.dilate(imageBlurr, imageBlurr, new Mat());
-            Imgproc.adaptiveThreshold(imageBlurr, imageA, 255,Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY,7, 3);
+            Imgproc.cvtColor(image, imageA, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.GaussianBlur(imageA, imageA, new Size(5,5), 0);
+            Imgproc.dilate(imageA, imageA, new Mat());
+            Imgproc.adaptiveThreshold(imageA, imageA, 255,Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY,7, 3);
 
             List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
             Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_TREE,Imgproc.CHAIN_APPROX_SIMPLE);
@@ -915,7 +1160,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
             Log.d("------", "on post execute");
 
             if (isEstimated && result != null) {
-                imageRecord.setEstimate((int) (Double.parseDouble(result.estimate)));
+                imageRecord.setEstimate((int) (result.estimate));
                 imageRecord.setIsSynced(true);
 
                 mAdapter.updateImageRecord(imageRecord, ImageRecordListAdapter.Status.FINISHED);
@@ -977,7 +1222,7 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
         }
 
         public class Result {
-            public String estimate = "0";
+            public double estimate;
             public String densityImage;
             public String objectImage;
         }

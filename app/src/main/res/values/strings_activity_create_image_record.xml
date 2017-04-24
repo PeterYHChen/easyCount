@@ -3,9 +3,11 @@
     <string name="title_activity_create_image_record">Edit</string>
 
     <string-array name="object_type_array">
-        <item>Blueberry</item>
-        <item>Log</item>
-        <item>Coin</item>
+        <item>Hough Circles</item>
+        <item>Naive</item>
+        <item>Naive Grayscale</item>
+        <item>Contours</item>
+        <item>Ignore Background</item>
     </string-array>
 
 </resources>

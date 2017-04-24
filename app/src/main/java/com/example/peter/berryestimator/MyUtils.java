@@ -238,14 +238,14 @@ public class MyUtils {
 
     // use CIE76 ΔE*ab to compute color similarity
     // reuturn a double value in [0, 1], 0 means no difference
-    public static boolean colorsAreSimilar(int a, int b) {
+    public static boolean colorsAreSimilar(int a, int b, int maxDelta) {
         int redDiff = Color.red(a) - Color.red(b);
         int blueDiff = Color.blue(a) - Color.blue(b);
         int greenDiff = Color.green(a) - Color.green(b);
 
         double deltaE = Math.sqrt(2*redDiff*redDiff + 4*blueDiff*blueDiff + 3*greenDiff*greenDiff);
 //        Log.d("--", "deltaE: " + deltaE);
-        return deltaE < 80;
+        return deltaE < maxDelta;
     }
 
     public static String getTimeString(long time) {
