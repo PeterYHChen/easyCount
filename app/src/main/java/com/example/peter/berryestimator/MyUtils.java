@@ -144,7 +144,6 @@ public class MyUtils {
 
             // set new min side to be 500
             bm = getResizedBitmap(bm, 500);
-            bm = transformSquareToCircleBitmap(bm);
             Log.d("image rescale size", bm.getByteCount()/1024 + "KB");
             Log.d("------", "width: " + bm.getWidth() + " height: " + bm.getHeight());
 
@@ -189,7 +188,7 @@ public class MyUtils {
     }
 
     // resize bitmap based on the shortest side
-    public static Bitmap getResizedBitmap(Bitmap bm, int newMinSide) {
+    private static Bitmap getResizedBitmap(Bitmap bm, int newMinSide) {
         int width = bm.getWidth();
         int height = bm.getHeight();
 

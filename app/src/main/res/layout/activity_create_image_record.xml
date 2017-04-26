@@ -56,7 +56,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:paddingLeft="0dp"
-                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        style="@style/Widget.AppCompat.Spinner.DropDown"
                         android:id="@+id/record_target_type"
                         />
 

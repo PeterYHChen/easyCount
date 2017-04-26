@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class CreateImageRecordActivity extends ActionBarActivity {
-
+    public static final String TAG_EDIT_IMAGE_DIALOG_FRAGMENT = "edit_image_dialog_fragment";
     public static final String IMAGE_RECORD = "image_record";
     public static final String IMAGE_RECORD_POSITION = "image_record_position";
     public static final String IMAGE_RECORD_ACTION = "image_record_action";
@@ -242,12 +242,24 @@ public class CreateImageRecordActivity extends ActionBarActivity {
                     } else {
                         imageIsChanged = false;
                     }
-
+                    showEditImageDialog(imageRecord);
                 } else {
                     Log.e("------", "Pick image from gallery error");
                 }
             }
         }
+    }
+
+    public void showEditImageDialog(ImageRecord imageRecord) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
+        if (prev != null) {
+            ft.remove(prev);
+            ft.commit();
+        }
+
+        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imageRecord);
+        editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
     }
 
     @Override
