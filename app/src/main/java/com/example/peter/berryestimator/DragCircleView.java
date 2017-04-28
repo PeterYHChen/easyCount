@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,11 +27,13 @@ public class DragCircleView extends ImageView {
 
     private Rect mImageBounds;
     private Rect mCircleBounds;
+    private boolean mImageBoundsIsCorrect = false;
+    private boolean mIsMovingCircleBounds = false;
     private Paint mRectPaint;
-
-    private boolean mDrawRect = false;
     private TextPaint mTextPaint = null;
 
+    private int mPreX;
+    private int mPreY;
     private OnUpCallback mCallback = null;
 
     public interface OnUpCallback {
@@ -76,52 +79,57 @@ public class DragCircleView extends ImageView {
 
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
-        // TODO: be aware of multi-touches
-        final int x = (int) event.getX();
-        final int y = (int) event.getX();
+        int action = event.getActionMasked();
 
-        // skip unnecessary touch x, y
-        if (!mImageBounds.contains(x, y))
-            return false;
+        // TODO: be aware of multi-touches
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        int halfSize = mCircleBounds.width()/2;
 
         // make sure circle is inside the image
 //        if (!mImageBounds.contains(mCircleBounds))
 //            mCircleBounds = getSquareRect(mImageBounds);
 
-        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                // skip unnecessary down-touch x, y
                 if (mCircleBounds.contains(x, y)) {
-                    int halfSize = mCircleBounds.width()/2;
-                    int centerX = mCircleBounds.centerX();
-                    int centerY = mCircleBounds.centerY();
-                    if (Math.abs(x - centerX) > 5 || Math.abs(y - centerY) > 5) {
-//                        if (x - halfSize < mImageBounds.left) {
-//                            centerX = mImageBounds.left + halfSize;
-//                        }
-//                        if (x + halfSize > mImageBounds.right) {
-//                            centerX = mImageBounds.right - halfSize;
-//                        }
-//                        if (y - halfSize < mImageBounds.top) {
-//                            centerY = mImageBounds.top + halfSize;
-//                        }
-//                        if (y - halfSize < mImageBounds.bottom) {
-//                            centerY = mImageBounds.bottom - halfSize;
-//                        }
-//                        mCircleBounds.set(centerX - halfSize, centerY - halfSize,
-//                                centerX + halfSize, centerY + halfSize);
-                        mCircleBounds.set(x, y, x + 2*halfSize, y + 2*halfSize);
+                    mPreX = x;
+                    mPreY = y;
+                    mIsMovingCircleBounds = true;
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (mIsMovingCircleBounds) {
+                    int offsetX = x - mPreX;
+                    int offsetY = y - mPreY;
+                    if (Math.abs(offsetX) > 0 || Math.abs(offsetY) > 0) {
+                        if (mCircleBounds.left + offsetX < mImageBounds.left) {
+                            offsetX = mImageBounds.left - mCircleBounds.left;
+                        } else if (mCircleBounds.right + offsetX > mImageBounds.right) {
+                            offsetX = mImageBounds.right - mCircleBounds.right;
+                        }
+
+                        if (mCircleBounds.top + offsetY < mImageBounds.top) {
+                            offsetY = mImageBounds.top - mCircleBounds.top;
+                        } else if (mCircleBounds.bottom + offsetY > mImageBounds.bottom) {
+                            offsetY = mImageBounds.bottom - mCircleBounds.bottom;
+                        }
+                        mCircleBounds.offset(offsetX, offsetY);
                         invalidate();
                     }
                 }
 
+                mPreX = x;
+                mPreY = y;
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (mCallback != null) {
-                    mCallback.onRectFinished(mCircleBounds);
-                }
-                invalidate();
+                mIsMovingCircleBounds = false;
+//                if (mCallback != null) {
+//                    mCallback.onRectFinished(mCircleBounds);
+//                }
                 break;
 
             default:
@@ -134,22 +142,26 @@ public class DragCircleView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mImageBounds = getBitmapRectInsideImageView(this);
-        mCircleBounds = getSquareRect(mImageBounds);
     }
 
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mCircleBounds != null) {
+        if (!mImageBoundsIsCorrect || mImageBounds == null) {
+            mImageBounds = getBitmapRectInsideImageView(this);
+            mCircleBounds = getSquareRect(mImageBounds);
+            mImageBoundsIsCorrect = true;
+        }
+
+        if (mImageBounds != null && mCircleBounds != null) {
             float centerX = mCircleBounds.centerX();
             float centerY = mCircleBounds.centerY();
             float r = mCircleBounds.width()/2f;
             canvas.drawRect(mImageBounds, mRectPaint);
             canvas.drawCircle(centerX, centerY, r, mRectPaint);
-            canvas.drawText("  (left: " + mCircleBounds.left + ", top: " + mCircleBounds.top + ")",
-                    mCircleBounds.right, mCircleBounds.bottom, mTextPaint);
+            canvas.drawText("  (centerX: " + mCircleBounds.centerX() + ", centerY: " + mCircleBounds.centerY() + ")",
+                    mCircleBounds.centerX(), mCircleBounds.centerY(), mTextPaint);
         }
     }
 
