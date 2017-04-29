@@ -4,13 +4,19 @@ package com.example.peter.berryestimator;
  * Created by yonghong on 4/25/17.
  */
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import android.widget.ImageView;
@@ -20,6 +26,9 @@ public class EditImageDialogFragment extends DialogFragment {
     private static final String IMAGE_RECORD = "image_record";
     private ImageRecord imageRecord;
     private DBManager dbManager;
+    private OnEditImageFragmentInteractionListener mListener;
+
+    DragCircleView mDragCircleView;
 
     public static EditImageDialogFragment newInstance(ImageRecord imageRecord) {
         EditImageDialogFragment fragment = new EditImageDialogFragment();
@@ -38,10 +47,8 @@ public class EditImageDialogFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MyUtils.startTimelog();
-
         super.onCreate(savedInstanceState);
-        dbManager = new DBManager(getActivity());
+        setHasOptionsMenu(true);
 
         imageRecord = getArguments().getParcelable(IMAGE_RECORD);
 
@@ -52,7 +59,7 @@ public class EditImageDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_edit_image, container, false);
 
-        ImageButton closeButton = (ImageButton)view.findViewById(R.id.close_button);
+        final ImageButton closeButton = (ImageButton)view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,13 +67,9 @@ public class EditImageDialogFragment extends DialogFragment {
             }
         });
 
-        Bitmap image = MyUtils.getResizedImage(getActivity(), imageRecord.getImagePath());
-
-//        final ImageView imageView = (ImageView)view.findViewById(R.id.image_view);
-        final DragCircleView dragCircleView = (DragCircleView) view.findViewById(R.id.drag_circle_view);
-
-        if (dragCircleView != null) {
-            dragCircleView.setOnUpCallback(new DragCircleView.OnUpCallback() {
+        mDragCircleView = (DragCircleView) view.findViewById(R.id.drag_circle_view);
+        if (mDragCircleView != null) {
+            mDragCircleView.setOnUpCallback(new DragCircleView.OnUpCallback() {
                 @Override
                 public void onRectFinished(final Rect rect) {
                     Toast.makeText(getActivity(), "Rect is (" + rect.left + ", " + rect.top + ", " + rect.right + ", " + rect.bottom + ")",
@@ -75,24 +78,59 @@ public class EditImageDialogFragment extends DialogFragment {
             });
         }
 
-        dragCircleView.setImageBitmap(image);
-
-
+        Bitmap image = MyUtils.getResizedImage(getActivity(), imageRecord.getImagePath());
+        mDragCircleView.setImageBitmap(image);
+//
+        final Button saveButton = (Button)view.findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onCroppedImage(mDragCircleView.getCroppedCircleBitmap());
+                    dismiss();
+                }
+            }
+        });
         return view;
     }
+//
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_edit_image_fragment, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        //send edited image back
+//        if (id == R.id.action_save) {
+//            mListener.onCroppedImage(mDragCircleView.getCroppedCircleBitmap());
+//            dismiss();
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.d("----------", "on attach");
+        try {
+            mListener = (OnEditImageFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnEditImageFragmentInteractionListener");
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        dbManager.closeDB();
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     public interface OnEditImageFragmentInteractionListener {
-        void onEditedImage(ImageRecord imageRecord);
+        void onCroppedImage(Bitmap image);
     }
 }

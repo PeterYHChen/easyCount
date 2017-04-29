@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -122,17 +123,8 @@ public class DragCircleView extends ImageView {
                     int centerY = mCircleBounds.centerY();
                     int zoomedRadius = (int) getPointDistance(x, y, centerX, centerY);
 
-                    // skip unacceptable radius
+                    // set miminum radius of the circle and skip unacceptable radius
                     if (zoomedRadius > 150 && zoomedRadius <= Math.min(mImageBounds.width(), mImageBounds.height())/2) {
-                        // set miminum radius of the circle
-    //                    if (zoomedRadius > 150
-    //                            && centerX - zoomedRadius >= mImageBounds.left
-    //                            && centerX + zoomedRadius <= mImageBounds.right
-    //                            && centerY - zoomedRadius >= mImageBounds.top
-    //                            && centerY + zoomedRadius <= mImageBounds.bottom
-    //                            )
-    //                        radius = zoomedRadius;
-
                         // pos0 = left, pos1 = top, pos2 = right, pos3 = bottom
                         int[] pos = {mCircleBounds.left, mCircleBounds.top, mCircleBounds.right, mCircleBounds.bottom};
                         boolean[] changed = {false, false, false, false};
@@ -178,7 +170,6 @@ public class DragCircleView extends ImageView {
                                 else
                                     pos[i] += offset;
 
-    //                    mCircleBounds.set(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
                         mCircleBounds.set(pos[0], pos[1], pos[2], pos[3]);
                         invalidate();
                     }
@@ -237,11 +228,6 @@ public class DragCircleView extends ImageView {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
 
@@ -261,7 +247,8 @@ public class DragCircleView extends ImageView {
             else
                 canvas.drawCircle(centerX, centerY, r, mCirclePaint);
 
-            canvas.drawText("  (centerX: " + mCircleBounds.centerX() + ", centerY: " + mCircleBounds.centerY() + ")",
+            canvas.drawText("  (left " + mCircleBounds.left + ", top: " + mCircleBounds.top +
+                            ",centerX: " + mCircleBounds.centerX() + ", centerY: " + mCircleBounds.centerY() + ")",
                     mCircleBounds.centerX(), mCircleBounds.centerY(), mTextPaint);
         }
     }
@@ -291,7 +278,7 @@ public class DragCircleView extends ImageView {
         final float scaleX = f[Matrix.MSCALE_X];
         final float scaleY = f[Matrix.MSCALE_Y];
 
-        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
+        // Get the drawable
         final Drawable d = imageView.getDrawable();
         final int origW = d.getIntrinsicWidth();
         final int origH = d.getIntrinsicHeight();
@@ -311,5 +298,41 @@ public class DragCircleView extends ImageView {
         rect.set(left, top, left + actW, top + actH);
 
         return rect;
+    }
+
+    public Bitmap getCroppedCircleBitmap() {
+        if (getDrawable() == null)
+            return null;
+
+        // Get image dimensions
+        // Get image matrix values and place them in an array
+        float[] f = new float[9];
+        getImageMatrix().getValues(f);
+
+        // Extract the scale values and reverse-scaled the circle region to bitmap
+        // (if aspect ratio maintained, scaleX == scaleY)
+        final float scaleX = 1/f[Matrix.MSCALE_X];
+        final float scaleY = 1/f[Matrix.MSCALE_Y];
+
+        RectF cropCircle = new RectF(getRelativeCircleRegion());
+
+        //Create a matrix and apply the scale factors
+        Matrix m = new Matrix();
+        m.postScale(scaleX, scaleY);
+        m.mapRect(cropCircle);
+
+        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
+        Bitmap bm = ((BitmapDrawable) getDrawable()).getBitmap();
+        bm = Bitmap.createBitmap(bm, (int)(cropCircle.left), (int)(cropCircle.top),
+                (int)(cropCircle.width()), (int)(cropCircle.height()));
+
+        return MyUtils.transformSquareToCircleBitmap(bm);
+    }
+
+    // perform relative offset based on imageBounds
+    private Rect getRelativeCircleRegion() {
+        Rect rt = new Rect(mCircleBounds);
+        rt.offset(-mImageBounds.left, -mImageBounds.top);
+        return rt;
     }
 }

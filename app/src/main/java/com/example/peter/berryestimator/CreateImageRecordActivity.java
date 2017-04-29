@@ -27,9 +27,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class CreateImageRecordActivity extends ActionBarActivity {
+public class CreateImageRecordActivity extends ActionBarActivity
+        implements EditImageDialogFragment.OnEditImageFragmentInteractionListener {
     public static final String TAG_EDIT_IMAGE_DIALOG_FRAGMENT = "edit_image_dialog_fragment";
     public static final String IMAGE_RECORD = "image_record";
+    public static final String IMAGE_RECORD_IMAGE = "image_record_image";
     public static final String IMAGE_RECORD_POSITION = "image_record_position";
     public static final String IMAGE_RECORD_ACTION = "image_record_action";
     public static final int IMAGE_RECORD_ACTION_NOT_FOUND = -1;
@@ -41,6 +43,7 @@ public class CreateImageRecordActivity extends ActionBarActivity {
     private DBManager dbManager;
 
     private ImageRecord imageRecord;
+    private Bitmap mImage;
     private int mAction;
 
     private static boolean imageIsChanged = false;
@@ -137,14 +140,20 @@ public class CreateImageRecordActivity extends ActionBarActivity {
 
     public void onDisplayImage() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(MainTabActivity.TAG_VIEW_IMAGE_DIALOG_FRAGMENT);
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
         if (prev != null) {
             ft.remove(prev);
             ft.commit();
         }
 
-        ViewImageDialogFragment viewImageDialogFragment = ViewImageDialogFragment.newInstance(imageRecord);
-        viewImageDialogFragment.show(getSupportFragmentManager(), MainTabActivity.TAG_VIEW_IMAGE_DIALOG_FRAGMENT);
+        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imageRecord);
+        editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
+    }
+
+    @Override
+    public void onCroppedImage(Bitmap image) {
+        mImage = image;
+        imageView.setImageBitmap(mImage);
     }
 
     private void showRecordRemoveDialog() {
@@ -267,6 +276,7 @@ public class CreateImageRecordActivity extends ActionBarActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(IMAGE_RECORD, imageRecord);
+        outState.putParcelable(IMAGE_RECORD_IMAGE, mImage);
     }
 
     @Override
@@ -274,11 +284,7 @@ public class CreateImageRecordActivity extends ActionBarActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         imageRecord = savedInstanceState.getParcelable(IMAGE_RECORD);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+        mImage = savedInstanceState.getParcelable(IMAGE_RECORD_IMAGE);
     }
 
     @Override
