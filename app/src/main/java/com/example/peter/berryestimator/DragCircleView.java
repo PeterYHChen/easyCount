@@ -29,7 +29,11 @@ public class DragCircleView extends ImageView {
     private Rect mCircleBounds;
     private boolean mImageBoundsIsCorrect = false;
     private boolean mIsMovingCircleBounds = false;
+    private boolean mIsZoomingCircleBounds = false;
+
     private Paint mRectPaint;
+    private Paint mCirclePaint;
+    private Paint mZoomingCirclePaint;
     private TextPaint mTextPaint = null;
 
     private int mPreX;
@@ -68,9 +72,19 @@ public class DragCircleView extends ImageView {
      */
     private void init() {
         mRectPaint = new Paint();
-        mRectPaint.setColor(getContext().getResources().getColor(android.R.color.holo_green_light));
+        mRectPaint.setColor(getContext().getResources().getColor(android.R.color.holo_blue_light));
         mRectPaint.setStyle(Paint.Style.STROKE);
         mRectPaint.setStrokeWidth(5); // TODO: should take from resources
+
+        mCirclePaint = new Paint();
+        mCirclePaint.setColor(getContext().getResources().getColor(android.R.color.holo_green_light));
+        mCirclePaint.setStyle(Paint.Style.STROKE);
+        mCirclePaint.setStrokeWidth(5); // TODO: should take from resources
+
+        mZoomingCirclePaint = new Paint();
+        mZoomingCirclePaint.setColor(getContext().getResources().getColor(android.R.color.holo_orange_light));
+        mZoomingCirclePaint.setStyle(Paint.Style.STROKE);
+        mZoomingCirclePaint.setStrokeWidth(5); // TODO: should take from resources
 
         mTextPaint = new TextPaint();
         mTextPaint.setColor(getContext().getResources().getColor(android.R.color.holo_green_light));
@@ -84,26 +98,95 @@ public class DragCircleView extends ImageView {
         // TODO: be aware of multi-touches
         int x = (int) event.getX();
         int y = (int) event.getY();
-        int halfSize = mCircleBounds.width()/2;
+        int radius = mCircleBounds.width()/2;
 
         // make sure circle is inside the image
-//        if (!mImageBounds.contains(mCircleBounds))
-//            mCircleBounds = getSquareRect(mImageBounds);
+        if (!mImageBounds.contains(mCircleBounds))
+            mCircleBounds = getSquareRect(mImageBounds);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 // skip unnecessary down-touch x, y
-                if (mCircleBounds.contains(x, y)) {
-                    mPreX = x;
-                    mPreY = y;
-                    mIsMovingCircleBounds = true;
+                if (onCircleEdge(mCircleBounds, x, y))
+                    mIsZoomingCircleBounds = true;
+                else if (mCircleBounds.contains(x, y)) {
+                        mIsMovingCircleBounds = true;
                 }
+                invalidate();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (mIsMovingCircleBounds) {
+
+                if (mIsZoomingCircleBounds) {
+                    int centerX = mCircleBounds.centerX();
+                    int centerY = mCircleBounds.centerY();
+                    int zoomedRadius = (int) getPointDistance(x, y, centerX, centerY);
+
+                    // skip unacceptable radius
+                    if (zoomedRadius > 150 && zoomedRadius <= Math.min(mImageBounds.width(), mImageBounds.height())/2) {
+                        // set miminum radius of the circle
+    //                    if (zoomedRadius > 150
+    //                            && centerX - zoomedRadius >= mImageBounds.left
+    //                            && centerX + zoomedRadius <= mImageBounds.right
+    //                            && centerY - zoomedRadius >= mImageBounds.top
+    //                            && centerY + zoomedRadius <= mImageBounds.bottom
+    //                            )
+    //                        radius = zoomedRadius;
+
+                        // pos0 = left, pos1 = top, pos2 = right, pos3 = bottom
+                        int[] pos = {mCircleBounds.left, mCircleBounds.top, mCircleBounds.right, mCircleBounds.bottom};
+                        boolean[] changed = {false, false, false, false};
+
+                        int offset = zoomedRadius - radius;
+                        boolean isNegative = false;
+
+                        // get the minimum distance we can expand
+                        int remainDist;
+                        // changed pos left
+                        if (x <= centerX) {
+                            changed[0] = true;
+                            remainDist = pos[0] - mImageBounds.left;
+                            if (offset > remainDist)
+                                offset = remainDist;
+                        }
+                        // changed pos top
+                        if (y <= centerY) {
+                            changed[1] = true;
+                            remainDist = pos[1] - mImageBounds.top;
+                            if (offset > remainDist)
+                                offset = remainDist;
+                        }
+                        // changed pos right
+                        if (x >= centerX) {
+                            changed[2] = true;
+                            remainDist = mImageBounds.right - pos[2];
+                            if (offset > remainDist)
+                                offset = remainDist;
+                        }
+                        // changed pos bottom
+                        if (y >= centerY) {
+                            changed[3] = true;
+                            remainDist = mImageBounds.bottom - pos[3];
+                            if (offset > remainDist)
+                                offset = remainDist;
+                        }
+
+                        for (int i = 0; i < changed.length; i++)
+                            if (changed[i])
+                                if (i <= 1)
+                                    pos[i] -= offset;
+                                else
+                                    pos[i] += offset;
+
+    //                    mCircleBounds.set(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
+                        mCircleBounds.set(pos[0], pos[1], pos[2], pos[3]);
+                        invalidate();
+                    }
+
+                } else if (mIsMovingCircleBounds) {
                     int offsetX = x - mPreX;
                     int offsetY = y - mPreY;
+
                     if (Math.abs(offsetX) > 0 || Math.abs(offsetY) > 0) {
                         if (mCircleBounds.left + offsetX < mImageBounds.left) {
                             offsetX = mImageBounds.left - mCircleBounds.left;
@@ -120,13 +203,12 @@ public class DragCircleView extends ImageView {
                         invalidate();
                     }
                 }
-
-                mPreX = x;
-                mPreY = y;
                 break;
 
             case MotionEvent.ACTION_UP:
                 mIsMovingCircleBounds = false;
+                mIsZoomingCircleBounds = false;
+                invalidate();
 //                if (mCallback != null) {
 //                    mCallback.onRectFinished(mCircleBounds);
 //                }
@@ -136,7 +218,22 @@ public class DragCircleView extends ImageView {
                 break;
         }
 
+        mPreX = x;
+        mPreY = y;
+
         return true;
+    }
+
+    private boolean onCircleEdge(Rect circle, int x, int y) {
+        double r = circle.width() / 2.0;
+        double dist = getPointDistance(circle.centerX(), circle.centerY(), x, y);
+        return Math.abs(dist - r) < 35;
+    }
+
+    private double getPointDistance(int x1, int y1, int x2, int y2) {
+        int distX = x1 - x2;
+        int distY = y1 - y2;
+        return Math.sqrt(distX*distX + distY*distY);
     }
 
     @Override
@@ -159,7 +256,11 @@ public class DragCircleView extends ImageView {
             float centerY = mCircleBounds.centerY();
             float r = mCircleBounds.width()/2f;
             canvas.drawRect(mImageBounds, mRectPaint);
-            canvas.drawCircle(centerX, centerY, r, mRectPaint);
+            if (mIsZoomingCircleBounds)
+                canvas.drawCircle(centerX, centerY, r, mZoomingCirclePaint);
+            else
+                canvas.drawCircle(centerX, centerY, r, mCirclePaint);
+
             canvas.drawText("  (centerX: " + mCircleBounds.centerX() + ", centerY: " + mCircleBounds.centerY() + ")",
                     mCircleBounds.centerX(), mCircleBounds.centerY(), mTextPaint);
         }
