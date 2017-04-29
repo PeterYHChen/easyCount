@@ -50,6 +50,7 @@ public class MyUtils {
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     public static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
+    private static final int resizedImageSize = 500;
     private static long timelog;
 
     public static Intent getConfiguredGalleryIntent() {
@@ -130,21 +131,20 @@ public class MyUtils {
     }
 
     public static String getCompressedImageString(Context ct, String imagePath) {
-        return compressBitmapToString(getResizedImage(ct, imagePath));
+        return compressImageToString(getResizedImage(ct, imagePath));
     }
 
-    public static Bitmap getResizedImage(Context ct, String imagePath) {
+    public static String getCompressedImageString(Bitmap image) {
+        return compressImageToString(getResizedImage(image, resizedImageSize));
+    }
+
+    public static Bitmap getImageFromPath(Context ct, String imagePath) {
         InputStream stream = null;
         Bitmap bm = null;
         try {
             stream = ct.getContentResolver().openInputStream(Uri.parse(imagePath));
             bm = BitmapFactory.decodeStream(stream);
             Log.d("image original size", bm.getByteCount()/1024 + "KB");
-            Log.d("------", "width: " + bm.getWidth() + " height: " + bm.getHeight());
-
-            // set new min side to be 500
-            bm = getResizedBitmap(bm, 500);
-            Log.d("image rescale size", bm.getByteCount()/1024 + "KB");
             Log.d("------", "width: " + bm.getWidth() + " height: " + bm.getHeight());
 
         } catch (FileNotFoundException e) {
@@ -162,13 +162,21 @@ public class MyUtils {
         return bm;
     }
 
-    public static String compressBitmapToString(Bitmap bmp){
-        if (bmp == null) {
+    // resized image min edge to be 500
+    public static Bitmap getResizedImage(Context ct, String imagePath) {
+        InputStream stream = null;
+        Bitmap image = getImageFromPath(ct, imagePath);
+        image = getResizedImage(image, resizedImageSize);
+        return image;
+    }
+
+    public static String compressImageToString(Bitmap bm){
+        if (bm == null) {
             return null;
         }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
         return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
     }
@@ -188,7 +196,10 @@ public class MyUtils {
     }
 
     // resize bitmap based on the shortest side
-    private static Bitmap getResizedBitmap(Bitmap bm, int newMinSide) {
+    public static Bitmap getResizedImage(Bitmap bm, int newMinSide) {
+        if (bm == null)
+            return null;
+
         int width = bm.getWidth();
         int height = bm.getHeight();
 

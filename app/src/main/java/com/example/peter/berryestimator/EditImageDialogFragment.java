@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class EditImageDialogFragment extends DialogFragment {
     private static final String IMAGE_RECORD = "image_record";
-    private ImageRecord imageRecord;
+    private ImageRecord mImageRecord;
     private DBManager dbManager;
     private OnEditImageFragmentInteractionListener mListener;
 
@@ -48,10 +48,8 @@ public class EditImageDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
-        imageRecord = getArguments().getParcelable(IMAGE_RECORD);
-
+//        setHasOptionsMenu(true);
+        mImageRecord = getArguments().getParcelable(IMAGE_RECORD);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Light);
     }
 
@@ -78,7 +76,7 @@ public class EditImageDialogFragment extends DialogFragment {
             });
         }
 
-        Bitmap image = MyUtils.getResizedImage(getActivity(), imageRecord.getImagePath());
+        Bitmap image = MyUtils.getImageFromPath(getActivity(), mImageRecord.getImagePath());
         mDragCircleView.setImageBitmap(image);
 //
         final Button saveButton = (Button)view.findViewById(R.id.save_button);
@@ -96,6 +94,8 @@ public class EditImageDialogFragment extends DialogFragment {
 //
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        menu.clear();
 //        inflater.inflate(R.menu.menu_edit_image_fragment, menu);
 //    }
 //

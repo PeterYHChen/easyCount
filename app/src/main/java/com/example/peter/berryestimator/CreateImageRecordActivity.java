@@ -3,6 +3,7 @@ package com.example.peter.berryestimator;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -40,16 +41,15 @@ public class CreateImageRecordActivity extends ActionBarActivity
     public static final int IMAGE_RECORD_REMOVE = 2;
     public static final String NO_TITLE = "(No title)";
 
-    private DBManager dbManager;
+    private DBManager mDBManager;
 
-    private ImageRecord imageRecord;
-    private Bitmap mImage;
+    private ImageRecord mImageRecord;
     private int mAction;
 
     private static boolean imageIsChanged = false;
     private static long timelog;
 
-    private ImageView imageView;
+    private ImageView mImageView;
     private Spinner targetTypeSpinner;
     private EditText imageLocationEditText;
     private EditText titleEditText;
@@ -64,24 +64,24 @@ public class CreateImageRecordActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_image_record);
 
-        dbManager = new DBManager(this);
+        mDBManager = new DBManager(this);
 
         // read image record data
-        imageRecord = getIntent().getParcelableExtra(IMAGE_RECORD);
+        mImageRecord = getIntent().getParcelableExtra(IMAGE_RECORD);
         mAction = getIntent().getIntExtra(IMAGE_RECORD_ACTION, IMAGE_RECORD_ACTION_NOT_FOUND);
 
         // initiate and config imageloader
         initImageLoader();
 
-        imageView = (ImageView) findViewById(R.id.record_image);
-//        imageView.setOnClickListener(new View.OnClickListener() {
+        mImageView = (ImageView) findViewById(R.id.record_image);
+//        mImageView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                onDisplayImage();
 //            }
 //        });
 
-        displayImageInView(imageRecord);
+        displayImageInView(mImageRecord);
 
         // set text fields and spinners
         titleEditText = (EditText) findViewById(R.id.record_title);
@@ -120,40 +120,22 @@ public class CreateImageRecordActivity extends ActionBarActivity
             // if edit record event, display data from image record
 
             // check if target type exists
-            int pos = targetTypeAdapter.getPosition(imageRecord.getTargetType());
+            int pos = targetTypeAdapter.getPosition(mImageRecord.getTargetType());
             if (pos >= 0)
                 targetTypeSpinner.setSelection(pos);
             else
                 targetTypeSpinner.setSelection(0);
 
 
-            titleEditText.setText(imageRecord.getTitle().equals(NO_TITLE) ? "" : imageRecord.getTitle());
-            imageLocationEditText.setText(imageRecord.getImageLocation());
-            if (imageRecord.getActualCount() >= 0) {
-                actualCountEditText.setText(String.valueOf(imageRecord.getActualCount()));
+            titleEditText.setText(mImageRecord.getTitle().equals(NO_TITLE) ? "" : mImageRecord.getTitle());
+            imageLocationEditText.setText(mImageRecord.getImageLocation());
+            if (mImageRecord.getActualCount() >= 0) {
+                actualCountEditText.setText(String.valueOf(mImageRecord.getActualCount()));
             }
             deleteButton.setVisibility(View.VISIBLE);
         }
 
         MyUtils.endTimelog("create image record interface");
-    }
-
-    public void onDisplayImage() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-            ft.commit();
-        }
-
-        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imageRecord);
-        editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
-    }
-
-    @Override
-    public void onCroppedImage(Bitmap image) {
-        mImage = image;
-        imageView.setImageBitmap(mImage);
     }
 
     private void showRecordRemoveDialog() {
@@ -183,26 +165,21 @@ public class CreateImageRecordActivity extends ActionBarActivity
         }
     }
 
-    // display image in imageView
+    // display image in mImageView
     public void displayImageInView(ImageRecord imageRecord) {
-        Log.d("image path", imageRecord.getImagePath());
-
-        ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), imageView, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
-                    if (loadedImage != null) {
-                        Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
-                        if(loadedImage.hasAlpha()) {
-                            showTempInfo("Alpha value detected in chosen image");
-                        } else {
-                            showTempInfo("No alpha value detected in chosen image");
-                        }
-                    }
-                }
-            });
+//        Log.d("image path", imageRecord.getImagePath());
+//
+//        ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView, new SimpleImageLoadingListener() {
+//                @Override
+//                public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
+//                    if (loadedImage != null) {
+//                        Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
+//                    }
+//                }
+//            });
 
 //        if (MyUtils.imagePathIsValid(imageRecord.getImagePath())){
-//            ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), imageView, new SimpleImageLoadingListener() {
+//            ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView, new SimpleImageLoadingListener() {
 //                @Override
 //                public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
 //                    Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
@@ -216,16 +193,18 @@ public class CreateImageRecordActivity extends ActionBarActivity
 //
 //            //TODO: decide whether to show scaled image when original one is deleted
 //            // if the record was saved in db before
-//        } else if (!imageRecord.getRecordId().isEmpty()){
-//            Cursor cursor = dbManager.findRowCursor(imageRecord);
-//            showTempInfo("image not exists, use scaled image");
-//            if (cursor.getCount() > 0) {
-//                cursor.moveToFirst();
-//                String imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
-//                imageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
-//            }
-//            cursor.close();
-//        }
+//        } else
+
+        if (!imageRecord.getRecordId().isEmpty()){
+            Cursor cursor = mDBManager.findRowCursor(imageRecord);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                String imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
+                mImageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
+            }
+            if (cursor != null)
+                cursor.close();
+        }
     }
 
     @Override
@@ -239,19 +218,19 @@ public class CreateImageRecordActivity extends ActionBarActivity
                     String imagePath = MyUtils.getAbsImagePath(this, imageUri);
 
                     // if path is changed
-                    if (!imageRecord.getImagePath().equals(imagePath)) {
-                        imageRecord.setImagePath(imagePath);
-                        imageRecord.setImageTakenDate(MyUtils.getLastModifiedDate(imageRecord.getImagePath()));
-                        Log.d("Image retrieved from", imageRecord.getImagePath());
-                        Log.d("Image last modified", imageRecord.getImageTakenDate() + "");
-                        displayImageInView(imageRecord);
+                    if (!mImageRecord.getImagePath().equals(imagePath)) {
+                        mImageRecord.setImagePath(imagePath);
+                        mImageRecord.setImageTakenDate(MyUtils.getLastModifiedDate(mImageRecord.getImagePath()));
+                        Log.d("Image retrieved from", mImageRecord.getImagePath());
+                        Log.d("Image last modified", mImageRecord.getImageTakenDate() + "");
+                        displayImageInView(mImageRecord);
 
                         imageIsChanged = true;
 
                     } else {
                         imageIsChanged = false;
                     }
-                    showEditImageDialog(imageRecord);
+                    showEditImageDialog(mImageRecord);
                 } else {
                     Log.e("------", "Pick image from gallery error");
                 }
@@ -272,25 +251,28 @@ public class CreateImageRecordActivity extends ActionBarActivity
     }
 
     @Override
+    public void onCroppedImage(Bitmap image) {
+        mImageView.setImageBitmap(image);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable(IMAGE_RECORD, imageRecord);
-        outState.putParcelable(IMAGE_RECORD_IMAGE, mImage);
+        outState.putParcelable(IMAGE_RECORD, mImageRecord);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        imageRecord = savedInstanceState.getParcelable(IMAGE_RECORD);
-        mImage = savedInstanceState.getParcelable(IMAGE_RECORD_IMAGE);
+        mImageRecord = savedInstanceState.getParcelable(IMAGE_RECORD);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dbManager.closeDB();
+        mDBManager.closeDB();
     }
 
     @Override
@@ -313,35 +295,39 @@ public class CreateImageRecordActivity extends ActionBarActivity
 
             // TODO: change file name of the image
             String text = titleEditText.getText().toString();
-            imageRecord.setTitle(text.isEmpty() ? NO_TITLE : text);
+            mImageRecord.setTitle(text.isEmpty() ? NO_TITLE : text);
 
-            imageRecord.setTargetType(targetTypeSpinner.getAdapter().
+            mImageRecord.setTargetType(targetTypeSpinner.getAdapter().
                     getItem(targetTypeSpinner.getSelectedItemPosition()).toString());
 
-            imageRecord.setImageLocation(imageLocationEditText.getText().toString());
+            mImageRecord.setImageLocation(imageLocationEditText.getText().toString());
 
             // if count is empty, no need to save
             text = actualCountEditText.getText().toString();
             if (!text.isEmpty()) {
-                imageRecord.setActualCount(Integer.parseInt(text));
+                mImageRecord.setActualCount(Integer.parseInt(text));
             }
 
-            if (imageRecord.getImagePath().isEmpty()){
+            if (mImageRecord.getImagePath().isEmpty() || mImageView.getDrawable() == null){
                 showTempInfo("Please choose a picture");
                 return true;
             }
 
-//            if (!MyUtils.imageExists(imageRecord.getImagePath())) {
+//            if (!MyUtils.imageExists(mImageRecord.getImagePath())) {
 //                showTempInfo("Image does not exist on device, please choose another picture");
 //                return true;
 //            }
 
-            int width = 230;
-            String compressedThumbnailString = getCompressedThumbnailString(imageRecord.getImagePath(), width);
-            imageRecord.setCompressedThumbnailString(compressedThumbnailString);
-            Log.d("compressed image length", imageRecord.getCompressedThumbnailString().length() / 1024.0 + "KB");
+            String compressedThumbnailString = getCompressedThumbnailString();
+            if (compressedThumbnailString == null) {
+                showTempInfo("Error. Empty thumbnail was returned");
+                return true;
+            }
 
-            imageRecord.setIsSynced(false);
+            mImageRecord.setCompressedThumbnailString(compressedThumbnailString);
+            Log.d("thumbnail length", mImageRecord.getCompressedThumbnailString().length() / 1024.0 + "KB");
+
+            mImageRecord.setIsSynced(false);
 
             setReturnData(mAction);
 
@@ -359,33 +345,33 @@ public class CreateImageRecordActivity extends ActionBarActivity
             case IMAGE_RECORD_CREATE:
                 Log.d("----------", "insert image record");
                 // TODO: reduce time cost, too slow, can try new runnable to open another thread
-                imageString = MyUtils.getCompressedImageString(this, imageRecord.getImagePath());
+                imageString = MyUtils.getCompressedImageString(getDisplayedImage());
                 if (imageString == null) {
                     return;
                 }
 
-                imageRecord.setRecordId(dbManager.insert(imageRecord, imageString));
+                mImageRecord.setRecordId(mDBManager.insert(mImageRecord, imageString));
                 break;
 
             case IMAGE_RECORD_EDIT:
                 Log.d("----------", "update image record");
                 if (imageIsChanged){
-                    // TODO: reduce time cost, compression too slow
-                    imageString = MyUtils.getCompressedImageString(this, imageRecord.getImagePath());
+                    // TODO: reduce time cost, compression too slow, can try new runnable to open another thread
+                    imageString = MyUtils.getCompressedImageString(getDisplayedImage());
                     if (imageString == null) {
                         return;
                     }
-                    imageRecord.setEstimate(-1);
+                    mImageRecord.setEstimate(-1);
 
-                    dbManager.update(imageRecord, imageString, "");
+                    mDBManager.update(mImageRecord, imageString, "");
                 } else {
-                    dbManager.update(imageRecord, null, null);
+                    mDBManager.update(mImageRecord, null, null);
                 }
                 break;
 
             case IMAGE_RECORD_REMOVE:
                 Log.d("----------", "remove image record");
-                dbManager.delete(imageRecord);
+                mDBManager.delete(mImageRecord);
                 break;
 
             default:
@@ -395,7 +381,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
         }
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(IMAGE_RECORD, imageRecord);
+        returnIntent.putExtra(IMAGE_RECORD, mImageRecord);
         returnIntent.putExtra(IMAGE_RECORD_ACTION, action);
         setResult(RESULT_OK, returnIntent);
         finish();
@@ -404,11 +390,34 @@ public class CreateImageRecordActivity extends ActionBarActivity
     private String getCompressedThumbnailString(String imagePath, int width) {
         // Set compressed thumbnail of image
         ImageSize imageSize = new ImageSize(width, width);
-        Bitmap bitmap = ImageLoader.getInstance().loadImageSync(imagePath, imageSize);
+        Bitmap image = ImageLoader.getInstance().loadImageSync(imagePath, imageSize);
 
-        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, width, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        image = ThumbnailUtils.extractThumbnail(image, width, width, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 
-        return MyUtils.compressBitmapToString(bitmap);
+        return MyUtils.compressImageToString(image);
+    }
+
+    private Bitmap getDisplayedImage() {
+        if (mImageView.getDrawable() == null)
+            return null;
+
+        Bitmap image = null;
+        if (mImageView.getDrawable() instanceof BitmapDrawable)
+            image = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
+
+        return image;
+    }
+
+    private String getCompressedThumbnailString() {
+        int width = 300;
+        int height = 300;
+        Bitmap image = getDisplayedImage();
+
+        // Set compressed thumbnail of image
+        image = MyUtils.getResizedImage(image, width);
+        image = ThumbnailUtils.extractThumbnail(image, width, height, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+
+        return MyUtils.compressImageToString(image);
     }
 
     private void showTempInfo(String s){

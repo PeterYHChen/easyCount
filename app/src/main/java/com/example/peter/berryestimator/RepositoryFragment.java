@@ -512,15 +512,15 @@ public class RepositoryFragment extends Fragment implements ImageRecordListAdapt
 
             result = new Result();
             if (imageRecord.getTargetType().equals(ImageRecord.MODEL_HOUGHCIRCLES))
-                result.densityImage = MyUtils.compressBitmapToString(detectCircles(naiveDetectGrayscale(bm)));
+                result.densityImage = MyUtils.compressImageToString(detectCircles(naiveDetectGrayscale(bm)));
             else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_NAIVE))
-                result.densityImage = MyUtils.compressBitmapToString(naiveDetect(bm));
+                result.densityImage = MyUtils.compressImageToString(naiveDetect(bm));
             else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_CONTOURS))
-                result.densityImage = MyUtils.compressBitmapToString(detectContours(bm));
+                result.densityImage = MyUtils.compressImageToString(detectContours(bm));
             else if (imageRecord.getTargetType().equals(ImageRecord.MODEL_NAIVE_GRAYSCALE))
-                result.densityImage = MyUtils.compressBitmapToString(naiveDetectGrayscale(bm));
+                result.densityImage = MyUtils.compressImageToString(naiveDetectGrayscale(bm));
             else
-                result.densityImage = MyUtils.compressBitmapToString(detectIgnoreBackground(bm));
+                result.densityImage = MyUtils.compressImageToString(detectIgnoreBackground(bm));
 //            result.estimate = String.valueOf(objectCnt);
             return isSuccessReturned;
         }
