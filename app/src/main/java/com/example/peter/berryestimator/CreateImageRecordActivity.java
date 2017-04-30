@@ -233,6 +233,14 @@ public class CreateImageRecordActivity extends ActionBarActivity
     }
 
     @Override
+    // when edit image fragment is cancelled, this function is called
+    public void onCancelledImageEdition() {
+        // if this is a action_record_create event, finish this whole activity
+
+
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 

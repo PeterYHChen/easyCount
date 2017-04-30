@@ -79,8 +79,8 @@ public class EditImageDialogFragment extends DialogFragment {
         Bitmap image = MyUtils.getResizedImage(getActivity(), mImagePath);
         mDragCircleView.setImageBitmap(image);
 //
-        final Button saveButton = (Button)view.findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        final Button cropButton = (Button)view.findViewById(R.id.crop_button);
+        cropButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
@@ -131,6 +131,9 @@ public class EditImageDialogFragment extends DialogFragment {
     }
 
     public interface OnEditImageFragmentInteractionListener {
+        // when edit image fragment is cancelled, this function is called
         void onCroppedImage(Bitmap image, String imagePath);
+        // when edit image fragment is cancelled, this function is called
+        void onCancelledImageEdition();
     }
 }
