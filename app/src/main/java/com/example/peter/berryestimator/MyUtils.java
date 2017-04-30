@@ -50,6 +50,7 @@ public class MyUtils {
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     public static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
+    // change imageview width of imageView in @activity_create_image_record.xml when change this value
     private static final int resizedImageSize = 500;
     private static long timelog;
 
@@ -88,26 +89,27 @@ public class MyUtils {
 
     // get absolute path to avoid permission problem with media content provider
     public static String getAbsImagePath(Context ct, Uri uri){
-//        String document_id, path;
-//        Cursor cursor = ct.getContentResolver().query(uri, null, null, null, null);
-//        if (cursor != null && cursor.moveToFirst()) {
-//            document_id = cursor.getString(0);
-//            document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-//            cursor.close();
-//
-//            cursor = ct.getContentResolver().query(
-//                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                    null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-//            if (cursor != null && cursor.moveToFirst()) {
-//                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-//                cursor.close();
-//
-//                return "file://" + path;
-//            }
-//        }
-//
-//        return "";
-        return uri.toString();
+        String document_id, path;
+        Cursor cursor = ct.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            document_id = cursor.getString(0);
+            document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+            cursor.close();
+
+            cursor = ct.getContentResolver().query(
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                cursor.close();
+
+                return "file://" + path;
+            }
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return null;
     }
 
     public static long getLastModifiedDate(String imagePath) {
@@ -121,7 +123,7 @@ public class MyUtils {
     }
 
     public static boolean imagePathIsValid(String imagePath) {
-        return !imagePath.isEmpty() && imageExists(imagePath);
+        return imagePath != null && !imagePath.isEmpty() && imageExists(imagePath);
     }
 
     public static boolean imageExists(String imagePath) {
@@ -144,8 +146,11 @@ public class MyUtils {
         try {
             stream = ct.getContentResolver().openInputStream(Uri.parse(imagePath));
             bm = BitmapFactory.decodeStream(stream);
-            Log.d("image original size", bm.getByteCount()/1024 + "KB");
-            Log.d("------", "width: " + bm.getWidth() + " height: " + bm.getHeight());
+
+            if (bm != null) {
+                Log.d("image original size", bm.getByteCount()/1024 + "KB");
+                Log.d("------", "width: " + bm.getWidth() + " height: " + bm.getHeight());
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

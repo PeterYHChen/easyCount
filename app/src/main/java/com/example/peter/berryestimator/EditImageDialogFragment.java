@@ -23,18 +23,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EditImageDialogFragment extends DialogFragment {
-    private static final String IMAGE_RECORD = "image_record";
-    private ImageRecord mImageRecord;
+    private static final String IMAGE_PATH = "image_path";
+    private String mImagePath;
     private DBManager dbManager;
     private OnEditImageFragmentInteractionListener mListener;
 
     DragCircleView mDragCircleView;
 
-    public static EditImageDialogFragment newInstance(ImageRecord imageRecord) {
+    public static EditImageDialogFragment newInstance(String imagePath) {
         EditImageDialogFragment fragment = new EditImageDialogFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(IMAGE_RECORD, imageRecord);
+        args.putString(IMAGE_PATH, imagePath);
         fragment.setArguments(args);
 
         return fragment;
@@ -49,7 +49,7 @@ public class EditImageDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
-        mImageRecord = getArguments().getParcelable(IMAGE_RECORD);
+        mImagePath = getArguments().getString(IMAGE_PATH);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Light);
     }
 
@@ -76,7 +76,7 @@ public class EditImageDialogFragment extends DialogFragment {
             });
         }
 
-        Bitmap image = MyUtils.getImageFromPath(getActivity(), mImageRecord.getImagePath());
+        Bitmap image = MyUtils.getResizedImage(getActivity(), mImagePath);
         mDragCircleView.setImageBitmap(image);
 //
         final Button saveButton = (Button)view.findViewById(R.id.save_button);
@@ -84,7 +84,7 @@ public class EditImageDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onCroppedImage(mDragCircleView.getCroppedCircleBitmap());
+                    mListener.onCroppedImage(mDragCircleView.getCroppedCircleBitmap(), mImagePath);
                     dismiss();
                 }
             }
@@ -131,6 +131,6 @@ public class EditImageDialogFragment extends DialogFragment {
     }
 
     public interface OnEditImageFragmentInteractionListener {
-        void onCroppedImage(Bitmap image);
+        void onCroppedImage(Bitmap image, String imagePath);
     }
 }

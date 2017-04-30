@@ -123,6 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
+                    android:background="#444444"
                     android:id="@+id/record_image"
                     />
 

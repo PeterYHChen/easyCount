@@ -46,7 +46,6 @@ public class CreateImageRecordActivity extends ActionBarActivity
     private ImageRecord mImageRecord;
     private int mAction;
 
-    private static boolean imageIsChanged = false;
     private static long timelog;
 
     private ImageView mImageView;
@@ -74,14 +73,12 @@ public class CreateImageRecordActivity extends ActionBarActivity
         initImageLoader();
 
         mImageView = (ImageView) findViewById(R.id.record_image);
-//        mImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onDisplayImage();
-//            }
-//        });
-
-        displayImageInView(mImageRecord);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditImageDialog(mImageRecord.getImagePath());
+            }
+        });
 
         // set text fields and spinners
         titleEditText = (EditText) findViewById(R.id.record_title);
@@ -116,9 +113,11 @@ public class CreateImageRecordActivity extends ActionBarActivity
             targetTypeSpinner.setSelection(0);
             deleteButton.setVisibility(View.GONE);
 
-        } else {
-            // if edit record event, display data from image record
+            // switch to edit image fragment
+            showEditImageDialog(mImageRecord.getImagePath());
 
+        // if edit record event, display data from image record
+        } else {
             // check if target type exists
             int pos = targetTypeAdapter.getPosition(mImageRecord.getTargetType());
             if (pos >= 0)
@@ -133,6 +132,9 @@ public class CreateImageRecordActivity extends ActionBarActivity
                 actualCountEditText.setText(String.valueOf(mImageRecord.getActualCount()));
             }
             deleteButton.setVisibility(View.VISIBLE);
+
+            // display image of current record
+            displayImageInView(mImageRecord);
         }
 
         MyUtils.endTimelog("create image record interface");
@@ -167,43 +169,22 @@ public class CreateImageRecordActivity extends ActionBarActivity
 
     // display image in mImageView
     public void displayImageInView(ImageRecord imageRecord) {
-//        Log.d("image path", imageRecord.getImagePath());
-//
-//        ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView, new SimpleImageLoadingListener() {
-//                @Override
-//                public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
-//                    if (loadedImage != null) {
-//                        Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
-//                    }
-//                }
-//            });
-
-//        if (MyUtils.imagePathIsValid(imageRecord.getImagePath())){
-//            ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView, new SimpleImageLoadingListener() {
-//                @Override
-//                public void onLoadingComplete(String imagePath, View view, Bitmap loadedImage) {
-//                    Log.d("loadedImage size", loadedImage.getByteCount() / 1024.0 / 1024 + "MB");
-//                    if(loadedImage.hasAlpha()) {
-//                        showTempInfo("Alpha value detected in chosen image");
-//                    } else {
-//                        showTempInfo("No alpha value detected in chosen image");
-//                    }
-//                }
-//            });
-//
-//            //TODO: decide whether to show scaled image when original one is deleted
-//            // if the record was saved in db before
-//        } else
-
+        // if the record was saved in db before
         if (!imageRecord.getRecordId().isEmpty()){
+            Log.d("Image retreved from", "database");
             Cursor cursor = mDBManager.findRowCursor(imageRecord);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()) {
                 String imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
                 mImageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
             }
             if (cursor != null)
                 cursor.close();
+        } else if (MyUtils.imagePathIsValid(imageRecord.getImagePath())){
+            // only display image when image path is valid
+            Log.d("Image retreved from", "image path" + imageRecord.getImagePath());
+            ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView);
+        } else {
+            showTempInfo("The original image is no more on current device, please select another image to evaluate");
         }
     }
 
@@ -213,24 +194,10 @@ public class CreateImageRecordActivity extends ActionBarActivity
         if (requestCode == MyUtils.PICK_IMAGE_ACTIVITY_REQUEST_CODE){
             if (resultCode == RESULT_OK) {
                 if (data != null && data.getData() != null) {
-                    // transform content path into absolute path and save it into record
+                    // transform content path into absolute path and switch to edit image fragment
                     Uri imageUri = data.getData();
                     String imagePath = MyUtils.getAbsImagePath(this, imageUri);
-
-                    // if path is changed
-                    if (!mImageRecord.getImagePath().equals(imagePath)) {
-                        mImageRecord.setImagePath(imagePath);
-                        mImageRecord.setImageTakenDate(MyUtils.getLastModifiedDate(mImageRecord.getImagePath()));
-                        Log.d("Image retrieved from", mImageRecord.getImagePath());
-                        Log.d("Image last modified", mImageRecord.getImageTakenDate() + "");
-                        displayImageInView(mImageRecord);
-
-                        imageIsChanged = true;
-
-                    } else {
-                        imageIsChanged = false;
-                    }
-                    showEditImageDialog(mImageRecord);
+                    showEditImageDialog(imagePath);
                 } else {
                     Log.e("------", "Pick image from gallery error");
                 }
@@ -238,7 +205,13 @@ public class CreateImageRecordActivity extends ActionBarActivity
         }
     }
 
-    public void showEditImageDialog(ImageRecord imageRecord) {
+    public void showEditImageDialog(String imagePath) {
+        // if the image path does not retreive image, skip showing this dialog
+        if (!MyUtils.imagePathIsValid(imagePath)) {
+            showTempInfo("The original image is no more on current device, please select another image");
+            return;
+        }
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
         if (prev != null) {
@@ -246,13 +219,17 @@ public class CreateImageRecordActivity extends ActionBarActivity
             ft.commit();
         }
 
-        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imageRecord);
+        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imagePath);
         editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
     }
 
     @Override
-    public void onCroppedImage(Bitmap image) {
+    public void onCroppedImage(Bitmap image, String imagePath) {
         mImageView.setImageBitmap(image);
+        mImageRecord.setImagePath(imagePath);
+        mImageRecord.setImageTakenDate(MyUtils.getLastModifiedDate(imagePath));
+        Log.d("Image retrieved from", mImageRecord.getImagePath());
+        Log.d("Image last modified", mImageRecord.getImageTakenDate() + "");
     }
 
     @Override
@@ -292,8 +269,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
         //save image record
         if (id == R.id.action_save) {
             // retrieve values
-
-            // TODO: change file name of the image
+            // TODO: change file name of the image to be organized
             String text = titleEditText.getText().toString();
             mImageRecord.setTitle(text.isEmpty() ? NO_TITLE : text);
 
@@ -355,18 +331,13 @@ public class CreateImageRecordActivity extends ActionBarActivity
 
             case IMAGE_RECORD_EDIT:
                 Log.d("----------", "update image record");
-                if (imageIsChanged){
-                    // TODO: reduce time cost, compression too slow, can try new runnable to open another thread
-                    imageString = MyUtils.getCompressedImageString(getDisplayedImage());
-                    if (imageString == null) {
-                        return;
-                    }
-                    mImageRecord.setEstimate(-1);
-
-                    mDBManager.update(mImageRecord, imageString, "");
-                } else {
-                    mDBManager.update(mImageRecord, null, null);
+                // TODO: reduce time cost, compression too slow, can try new runnable to open another thread
+                imageString = MyUtils.getCompressedImageString(getDisplayedImage());
+                if (imageString == null) {
+                    return;
                 }
+                mImageRecord.setEstimate(-1);
+                mDBManager.update(mImageRecord, imageString, "");
                 break;
 
             case IMAGE_RECORD_REMOVE:
