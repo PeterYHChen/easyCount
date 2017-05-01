@@ -275,6 +275,7 @@ public class ImageRecordListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         int position = getImageRecordPosition(imageRecord);
         if (inRange(position)) {
             recordList.remove(position);
+            notifyItemRemoved(position);
         }
     }
 

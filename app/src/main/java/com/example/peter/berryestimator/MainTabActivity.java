@@ -214,12 +214,14 @@ public class MainTabActivity extends ActionBarActivity implements
 
             case CreateImageRecordActivity.IMAGE_RECORD_EDIT:
                 repositoryFragment.updateImageRecord(imageRecord);
-                recordInfoDialogFragment.updateRecordInfoDialog(imageRecord);
+                if (recordInfoDialogFragment != null)
+                    recordInfoDialogFragment.updateRecordInfoDialog(imageRecord);
                 break;
 
             case CreateImageRecordActivity.IMAGE_RECORD_REMOVE:
                 repositoryFragment.removeImageRecord(imageRecord);
-                recordInfoDialogFragment.dismiss();
+                if (recordInfoDialogFragment != null)
+                    recordInfoDialogFragment.dismiss();
                 break;
 
             default:

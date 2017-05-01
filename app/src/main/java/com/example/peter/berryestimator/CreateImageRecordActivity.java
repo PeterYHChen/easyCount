@@ -1,5 +1,7 @@
 package com.example.peter.berryestimator;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,7 +34,8 @@ public class CreateImageRecordActivity extends ActionBarActivity
         implements EditImageDialogFragment.OnEditImageFragmentInteractionListener {
     public static final String TAG_EDIT_IMAGE_DIALOG_FRAGMENT = "edit_image_dialog_fragment";
     public static final String IMAGE_RECORD = "image_record";
-    public static final String IMAGE_RECORD_IMAGE = "image_record_image";
+    public static final String EDITING_IMAGE_PATH = "editing_image_path";
+    public static final String IMAGE_DATA = "image_data";
     public static final String IMAGE_RECORD_POSITION = "image_record_position";
     public static final String IMAGE_RECORD_ACTION = "image_record_action";
     public static final int IMAGE_RECORD_ACTION_NOT_FOUND = -1;
@@ -46,6 +49,12 @@ public class CreateImageRecordActivity extends ActionBarActivity
     private ImageRecord mImageRecord;
     private int mAction;
 
+    // this image path is used to indicate whether an image is selected to edit. null means no image is selected.
+    // this image path will not be saved in mImageRecord until the image is cropped successfully.
+    // used to handle screen rotation problem
+    private String mEditingImagePath;
+    private ImageDataFragment mImageFragment;
+
     private static long timelog;
 
     private ImageView mImageView;
@@ -58,16 +67,37 @@ public class CreateImageRecordActivity extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MyUtils.startTimelog();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_image_record);
 
         mDBManager = new DBManager(this);
 
-        // read image record data
-        mImageRecord = getIntent().getParcelableExtra(IMAGE_RECORD);
+        // read action
         mAction = getIntent().getIntExtra(IMAGE_RECORD_ACTION, IMAGE_RECORD_ACTION_NOT_FOUND);
+
+        if (savedInstanceState == null) {
+            // read image record data
+            mImageRecord = getIntent().getParcelableExtra(IMAGE_RECORD);
+            // Empty string is used only for the first time
+            mEditingImagePath = "";
+        } else {
+            // used pre-saved data
+            mImageRecord = savedInstanceState.getParcelable(IMAGE_RECORD);
+            mEditingImagePath = savedInstanceState.getString(EDITING_IMAGE_PATH);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        mImageFragment = (ImageDataFragment) fm.findFragmentByTag(IMAGE_DATA);
+        // create the fragment and get original image from device for the first time
+        if (mImageFragment == null) {
+            // add the fragment
+            mImageFragment = new ImageDataFragment();
+            fm.beginTransaction().add(mImageFragment, IMAGE_DATA).commit();
+
+            // only init with original image when action is not create action
+            if (mAction != IMAGE_RECORD_CREATE)
+                mImageFragment.setImage(getOriginalImageFromImageRecord());
+        }
 
         // initiate and config imageloader
         initImageLoader();
@@ -79,6 +109,9 @@ public class CreateImageRecordActivity extends ActionBarActivity
                 showEditImageDialog(mImageRecord.getImagePath());
             }
         });
+
+        // display image of current record
+        displayImageInImageView(mImageFragment.getImage());
 
         // set text fields and spinners
         titleEditText = (EditText) findViewById(R.id.record_title);
@@ -113,8 +146,11 @@ public class CreateImageRecordActivity extends ActionBarActivity
             targetTypeSpinner.setSelection(0);
             deleteButton.setVisibility(View.GONE);
 
-            // switch to edit image fragment
-            showEditImageDialog(mImageRecord.getImagePath());
+            // switch to edit image fragment if the editing image path is not null
+            if (mEditingImagePath != null && mEditingImagePath.isEmpty())
+                showEditImageDialog(mImageRecord.getImagePath());
+            else if (mEditingImagePath != null)
+                showEditImageDialog(mEditingImagePath);
 
         // if edit record event, display data from image record
         } else {
@@ -132,12 +168,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
                 actualCountEditText.setText(String.valueOf(mImageRecord.getActualCount()));
             }
             deleteButton.setVisibility(View.VISIBLE);
-
-            // display image of current record
-            displayImageInView(mImageRecord);
         }
-
-        MyUtils.endTimelog("create image record interface");
     }
 
     private void showRecordRemoveDialog() {
@@ -167,25 +198,35 @@ public class CreateImageRecordActivity extends ActionBarActivity
         }
     }
 
-    // display image in mImageView
-    public void displayImageInView(ImageRecord imageRecord) {
-        // if the record was saved in db before
-        if (!imageRecord.getRecordId().isEmpty()){
+    private Bitmap getOriginalImageFromImageRecord() {
+        Bitmap image = null;
+        if (!mImageRecord.getRecordId().isEmpty()) {
             Log.d("Image retreved from", "database");
-            Cursor cursor = mDBManager.findRowCursor(imageRecord);
+            Cursor cursor = mDBManager.findRowCursor(mImageRecord);
             if (cursor != null && cursor.moveToFirst()) {
                 String imageString = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_IMAGE));
-                mImageView.setImageBitmap(MyUtils.decodeBitmapFromString(imageString));
+                image = MyUtils.decodeBitmapFromString(imageString);
             }
             if (cursor != null)
                 cursor.close();
-        } else if (MyUtils.imagePathIsValid(imageRecord.getImagePath())){
+        } else if (MyUtils.imagePathIsValid(mImageRecord.getImagePath())){
             // only display image when image path is valid
-            Log.d("Image retreved from", "image path" + imageRecord.getImagePath());
-            ImageLoader.getInstance().displayImage(imageRecord.getImagePath(), mImageView);
+            Log.d("Image retreved from", "image path" + mImageRecord.getImagePath());
+            image = MyUtils.getImageFromPath(this, mImageRecord.getImagePath());
+            // TODO: this function might reduce delay?
+//            ImageLoader.getInstance().displayImage(mImageRecord.getImagePath(), mImageView);
         } else {
-            showTempInfo("The original image is no more on current device, please select another image to evaluate");
+            showTempInfo("The original image is no more on current device, " +
+                    "please select another image to evaluate");
         }
+
+        return image;
+    }
+
+    // display image in mImageView
+    private void displayImageInImageView(Bitmap image) {
+        mImageFragment.setImage(image);
+        mImageView.setImageBitmap(image);
     }
 
     @Override
@@ -211,33 +252,45 @@ public class CreateImageRecordActivity extends ActionBarActivity
             showTempInfo("The original image is no more on current device, please select another image");
             return;
         }
+        // the image path is to be edited, store it temporarily
+        mEditingImagePath = imagePath;
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // skip if current dialog has shown up, avoid repeatedly showing the same fragment
         if (prev != null) {
-            ft.remove(prev);
+            ft.show(prev);
             ft.commit();
+        } else {
+            EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imagePath);
+            editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
         }
-
-        EditImageDialogFragment editImageDialogFragment = EditImageDialogFragment.newInstance(imagePath);
-        editImageDialogFragment.show(getSupportFragmentManager(), TAG_EDIT_IMAGE_DIALOG_FRAGMENT);
     }
 
     @Override
     public void onCroppedImage(Bitmap image, String imagePath) {
-        mImageView.setImageBitmap(image);
+        displayImageInImageView(image);
         mImageRecord.setImagePath(imagePath);
         mImageRecord.setImageTakenDate(MyUtils.getLastModifiedDate(imagePath));
         Log.d("Image retrieved from", mImageRecord.getImagePath());
         Log.d("Image last modified", mImageRecord.getImageTakenDate() + "");
+
+        // set back to null indicating no image is editing
+        mEditingImagePath = null;
     }
 
     @Override
     // when edit image fragment is cancelled, this function is called
     public void onCancelledImageEdition() {
-        // if this is a action_record_create event, finish this whole activity
+        // if an image has been cropped and set, editImageDialogFragment only go back to createImageRecordActivity page.
+        if (getDisplayedImage() != null)
+            return;
 
-
+        // if this is a action_record_create event, no image was set, then skip current activity and go back to MainTabActivity
+        if (mAction == IMAGE_RECORD_CREATE) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+        }
     }
 
     @Override
@@ -245,6 +298,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(IMAGE_RECORD, mImageRecord);
+        outState.putString(EDITING_IMAGE_PATH, mEditingImagePath);
     }
 
     @Override
@@ -252,6 +306,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         mImageRecord = savedInstanceState.getParcelable(IMAGE_RECORD);
+        mEditingImagePath = savedInstanceState.getString(EDITING_IMAGE_PATH);
     }
 
     @Override
@@ -292,7 +347,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
                 mImageRecord.setActualCount(Integer.parseInt(text));
             }
 
-            if (mImageRecord.getImagePath().isEmpty() || mImageView.getDrawable() == null){
+            if (mImageRecord.getImagePath().isEmpty() || mImageFragment.getImage() == null) {
                 showTempInfo("Please choose a picture");
                 return true;
             }
@@ -377,14 +432,7 @@ public class CreateImageRecordActivity extends ActionBarActivity
     }
 
     private Bitmap getDisplayedImage() {
-        if (mImageView.getDrawable() == null)
-            return null;
-
-        Bitmap image = null;
-        if (mImageView.getDrawable() instanceof BitmapDrawable)
-            image = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
-
-        return image;
+        return mImageFragment.getImage();
     }
 
     private String getCompressedThumbnailString() {
