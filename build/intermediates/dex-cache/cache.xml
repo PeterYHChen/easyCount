@@ -3,57 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/6ab6ebdd0327c21034be87bb6347c9b4020f5874/output/jars/classes.jar"
+        jar="/home/yonghong/repository/easyCount/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_566a33e71c58a4d4f2f8fe2013b1ebec939b9cf6/classes.dex" />
+        sha1="0129c79eec9b6394924ae43d7f881867800d21ab">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c1b392855e01adf20f2cb7089fe0ac5a7a0a0d0f/classes.dex" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/yonghong/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.3/a85588bec3e2c4584d593d3f15df1677321bca72/universal-image-loader-1.9.3.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/yonghong/.android/build-cache/f24d94590453698ede40ab00cbdba97f25dfcd71/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/universal-image-loader-1.9.3_83d2951e57225b3ac066c55465042ec0034cfae3/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/c5fb11f5018fbf60fc1a023ee84fad01ad9da9b3/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7912610ed96381c25c36d986eba422731b9641b6">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_4b9a1fb51d24e0aefd2cebcf081b4a38e8fe6efe/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/f3e30da79a227072e32555f3bebf81579b81c166/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e1b1f91a6eeb1edc452e09f92cc38bfa8cf7cef8/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/967434292d4eed7001b1b34f0fa641ed2c942f76/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e9ac39e8a48c7fe771049fd49aad9a38394f4146/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/967434292d4eed7001b1b34f0fa641ed2c942f76/output/jars/libs/internal_impl-22.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-22.0.0_fb829e015dd3c52ac002e5a10a6792f8c8372376/classes.dex" />
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/pre-dexed/debug/classes_9dcc662bae8ec85e0fd29ddcdc72165387e37174.jar" />
     </item>
     <item
         is-multidex="true"
@@ -65,256 +29,13 @@
         <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ddfbb85307cea30580091915f9a98841d313579d/classes.dex" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/40fdd387596a5470da9d25b682c73861f92281ba/output/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/yonghong/repository/easyCount/openCVLibrary320/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="87405405e403de68f4057757b8a2e8de02bd65d0">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d286335c98d49cb46c1771674afc422991f02b5d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/d4f226d60be745eb00446bcfd8b80e87585adf78/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_111db1f58374c53326a18aaf25dcad92b9c30934/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/09735638b16a3661cc85b7903ce06e2184bd43b8/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="055783146ba9654a725442563be78cad303aad1f">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_9ed04851203d9ac5b85929261bc6bf775a8d72de/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/966f1256d21486aada790690b52e6b5c58c90a8b/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b4407ec64081b822a84a103e4e94c7e945e46b42/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/004cb08051844aa8166579fe57c7f2cd8aca093a/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="f0b653f07052064570b06767e9b4b0b6a29397af">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d2fdf5fdb37ffb1c1ab07156638e70a9fdac5bd2/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/67e0b0eb5a70b98ad289eb27b4ee4b02bf075360/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b5b5e77d546d49d1babd7eae8f6287d68d0b8db8/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/7be5a32e00aa15253c641b65e26a61a1e24f1f59/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_335133049cef4b8ddac84b59df242fce81cce10a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/d8d4dad68dc1c5819fd8dbb99e1c2af9d5b68a25/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="daa2783c5e148426f8333ff0cc34389527584520">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8271dcfddff4caaa3d7358484539528395b85298/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-22.0.0_e118682100c0b792edabea9be89360366a00e2e6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-22.0.0_e118682100c0b792edabea9be89360366a00e2e6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/ed2b97feef0a64df81c78bfac06475e2abc8aacf/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_dee79ebb7d192690ea3d96d537ed0dad2ddab256/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/76628d76d2fa92918e2cc885b1f25d80001ab127/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_77a7d0db9df40bc181288ef07ae5e7a84231f0a5/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.0/c4ba5371a29ac9b2ad6129b1d39ea38750043eff/gson-2.8.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c4ba5371a29ac9b2ad6129b1d39ea38750043eff">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.8.0_afb1ae231fd264221fee35e6660357406dd92061/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/library-2.4.0_751338b62b8a29364c02e7417f22ad4697561714/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/9814aaa1c4c4e6853e68f440986ad7d3e57afde9/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_17baf55fa614b2d87fe985caf82720607d13edfe/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/f359d3d374b147287ef514b779f67447cabfba38/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_4e289ce852b56c44062a7d372c01786df649f0c4/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/48385920252b4c02480e0ec9fa12a58538fa3620/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ceb3ebaebdeac2dcee805e6db06a1b106acdc603/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/a0b78b48a687adc254d54fa07a35223028302666/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8c27bef01525ea4673c699803f08aac6a9734f85/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/e2d679d0b1bd4d70d84e76782ed39edaad03a40f/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_2e5222482dfbae5e4573ef39cd0e93df0a4e1f67/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/374f0704336f2d13d627384baf629b38c29491cf/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3072811ee90f1b58eaf0f87194e8d422bc018551/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/87bf5dc8abfb1f7294f1f9de02c5509da25cda64/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6c6ab7ca90fc7112adbd179da0876478d5e4d657/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/9d816f1c5511285d192389e68d2db76e91d8ff6a/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_473d25b2f262111875c2cd5a5a0a8204d0c6058d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/1acfbde0dcab7efd6e878079174496d560de4a9f/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_0328ee854e45ac244e892d8d538bb25efc8ab756/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/e32830aace3254aca96b3254856e89ba7781d317/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_50b63f68801d63e27ca41c220b6d5b757552683a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/43279832cf0e43aff6ecd82bde1ae32f7e89ba6a/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_eb684678d84326c257c816c93e4231a7e400aa4e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/05cb42f04363b7c07edaedd7056697a3dff1c6df/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_26f0bd998417a407b159abdb4255f25984e384e0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/repository/easyCount/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7bdf05ce0f4924c5ed29fc66c216b4dd4119d8ba">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c1b392855e01adf20f2cb7089fe0ac5a7a0a0d0f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/yonghong/.android/build-cache/14c756db914f3d077ffd971a25a8b6aee9eab6a3/output/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
-        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_07e1d2df8a29b3e444a2a1f1daa67c59fb2fc9f0/classes.dex" />
+        sha1="06b8dcd50b0bf94cfbb49e4af03fcceee7060379">
+        <dex dex="/home/yonghong/repository/easyCount/app/build/intermediates/pre-dexed/debug/classes_790097b1e34bfaf7b585c1000c346122d6d78fad.jar" />
     </item>
 
 </items>
